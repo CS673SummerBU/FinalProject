@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE HTML>
+<head>
+    <title>Manager Portal</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/manager.css' %}">
+	
+	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript" src="{% static 'rab/js/manager.js' %}"></script>
+</head>
+<body>
+	<div id = "title-bar">
+	    <p>RAB - Restaurant Profile</p>
+	</div>
+	<div id = "tab-bar">
+	    <div class = "tab-title-container">
+            <a id = "personal" class="tab-title">Personal</a>
+            <span style="display: none">manager_personal</span>
+	    </div>
+	    <div class = "tab-title-container">
+	        <a id = "restaurant" class="tab-title">Restaurant</a>
+	        <span style="display: none">manager_restaurant</span>
+	    </div>
+	    <div class = "tab-title-container">
+	        <a id = "menu" class="tab-title">Menu</a>
+	        <span style="display: none">manager_menu</span>
+	    </div>
+	    <div class = "tab-title-container">
+	        <a id = "status" class="tab-title">Status</a>
+	        <span style="display: none">manager_status</span>
+	    </div>
+	    <div class = "tab-title-container">
+	        <a id = "employee" class="tab-title">Employee</a>
+	        <span style="display: none">manager_employee</span>
+	    </div>
+	</div>
+        <iframe id = "main-frame" frameborder="0" width="100%" height="800px"></iframe>
+	

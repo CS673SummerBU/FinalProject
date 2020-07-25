@@ -1,0 +1,42 @@
+#employee-container{
+    height: 600px;
+    width: 100%;
+}
+
+#employee-list-container{
+    border: #333;
+    height: 100%;
+    width: 33%;
+    border-width: 2px;
+    border-style: solid;
+    margin: 0;
+    float: left;
+}
+
+#employee-detail-container{
+    border: #333;
+    height: 100%;
+    width: 66%;
+    border-width: 2px;
+    border-style: solid;
+    margin: 0;
+    float: right;
+}
+
+.employee-item{
+    height: auto;
+    background: #eee;
+    width: 100%;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.employee-item > p{
+    width: fit-content;
+    margin: auto;
+    font-size: 
+}
+
+.selected{
+    background: #aaa;
+}

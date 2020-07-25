@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE HTML>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/manager.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/status.css' %}">
+	
+	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'rab/js/manager_status_detail.js' %}"></script>
+     <script type="text/javascript" src="{% static 'rab/js/util.js' %}"></script>
+</head>
+<body>
+	<div class="limiter">
+        <img id = "dish-image" src="" alt="" width="200" height="200" style="display: none;">
+        <div style = "display: block; width: 40%; min-width: 500px;">
+            <div id = "left-panel" style = "width: 30%; height: 100%; float: left;">
+                <p id = "name">Name</p>
+                <p id = "cook-time">Cook Time</p>
+                <p id = "fresh-time">Fresh Time</p>
+                <p id = "last-served">Since Last Served</p>
+                <p id = "next-refill">Next Refill Due</p>
+                <p id = "order-status">Order Status</p>
+            </div>
+            <div id = "right-panel" style = "width: 70%; height: 100%; float: right; background: aliceblue">
+                <p id = "name-value"></p>
+                <p id = "cook-time-value"></p>
+                <p id = "fresh-time-value"></p>
+                <p id = "last-served-value"></p>
+                <p id = "next-refill-value"></p>
+                <p id = "order-status-value"></p>
+            </div>
+        </div>
+        
+	</div>
+</body>
