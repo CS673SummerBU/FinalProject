@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE HTML>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/manager.css' %}">
+
+   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'rab/js/manager_restaurant.js' %}"></script>
+</head>
+<body>
+	<div class="limiter">
+        <div class="container-form">
+			<div class="wrap-form">
+				<form id="manager-restaurant-form" class="rastaurant-basic" method="POST" action="manager_restaurant_update">
+					{% csrf_token %}
+					<div class="wrap-input">
+					    <p>Name*</p>
+						<input id = "name" class="input" type="text" name="name" placeholder="Name" value="{{ restaurant.name }}">
+					</div>
+
+					<div class="wrap-input">
+					    <p>Address</p>
+						<input id = "address" class="input" type="text" name="address" placeholder="Address" value="{{ restaurant.address }}">
+					</div>
+					
+					<div class="wrap-input">
+					    <p>Phone</p>
+						<input id = "phone" class="input" type="text" name="phone" placeholder="Phone" value="{{ restaurant.phone }}">
+					</div>
+					
+					<div class="wrap-input">
+					    <p>Open Time</p>
+						<input id = "open-time" class="input" type="time" name="open-time" value="{{ restaurant.open_time }}">
+					</div>
+					
+					<div class="wrap-input">
+					    <p>Close Time</p>
+						<input id = "close-time" class="input" type="time" name="close-time" value="{{ restaurant.close_time }}">
+					</div>
+
+					<div class="container-form-btn">
+						<input type=Submit id="save-btn" class="form-btn" value="Save">
+						<!--<button id="save-btn" class="form-btn" type="button">
+							Save
+						</button>-->
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		<div id = "open-close-container">
+		    <button id = "open-btn" class = "operation-btn" type="button">
+		        OPEN
+		    </button>
+		    <button id = "close-btn" class = "operation-btn" type="button">
+		        CLOSE
+		    </button>
+		</div>
+	</div>
+</body>

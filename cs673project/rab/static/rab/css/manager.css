@@ -1,0 +1,63 @@
+#tab-bar{
+    flex-direction: row;
+}
+
+.tab-title-container{
+    padding: 10px 0;
+    display: inline-flex;
+    width: 200px;
+    background: #ddd;
+    height: auto;
+    cursor: pointer;
+}
+
+.tab-title{
+    font-size: 20px;
+    padding: 0;
+    margin: auto;
+}
+
+.active-tab{
+    background: #fff;
+}
+
+.container-form{
+    margin: 100px 50px;
+}
+
+.wrap-input{
+    margin: 30px 0;
+}
+
+.wrap-input > p{
+    margin: 5px 0;
+    font-size: 20px;
+}
+
+#open-btn{
+    height: 50px;
+    font-size: 20px;
+    border-radius: 5px;
+    width: 150px;
+    background: deepskyblue;
+}
+
+#close-btn{
+    height: 50px;
+    font-size: 20px;
+    border-radius: 5px;
+    width: 150px;
+    background: crimson;
+}
+
+#add-item-btn{
+    height: 50px;
+    width: 50px;
+    margin: 0 auto;
+    display: block;
+}
+
+#add-item-container{
+    align-content: center;
+    margin: 20px 0;
+}

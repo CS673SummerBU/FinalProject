@@ -1,0 +1,15 @@
+#title-bar{
+    background: #bbb;
+    padding: 5px;
+    padding-left: 50px;
+    margin: auto;
+    font-size: 25px;
+}
+
+.form-btn{
+    height: 40px;
+    font-size: 20px;
+    background: deepskyblue;
+    border-radius: 5px;
+}
+

@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE HTML>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/manager.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/menu.css' %}">
+	
+      
+   	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'rab/js/manager_menu.js' %}"></script>
+</head>
+<body>
+	<div class="limiter">
+		<div id = "menu-container">
+		    <div id = "menu-list-container">
+		    <div id = "menu-list-items-container">
+		        
+		    </div>
+		    <div id = "add-item-container">
+		        <img id= "add-item-btn" src="{% static 'rab/resources/plus.png' %}" alt="Click to add an item">
+		    </div>
+		    </div>
+		    <div id = "menu-detail-container">
+		        <iframe id="menu-detail" frameborder="0" width="100%" height="100%"></iframe>
+		    </div>
+		</div>
+	</div>
+</body>

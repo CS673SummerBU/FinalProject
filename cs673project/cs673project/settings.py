@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'cs673project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'cs673_rab',
-        'USER' : '',
-        'PASSWORD' : '',
+        'NAME' : 'rab',
+        'USER' : 'cs673user',
+        'PASSWORD' : 'cs673user',
         'HOST' : '127.0.0.1'
     }
 }
@@ -137,3 +137,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+AUTH_USER_MODEL = 'rab.User'
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'

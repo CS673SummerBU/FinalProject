@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE HTML>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/manager.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/status.css' %}">
+      
+   	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+	   <script type="text/javascript" src="{% static 'rab/js/manager_status.js' %}"></script>
+</head>
+<body>
+	<div class="limiter">
+		<div id = "status-container">
+		    <div id = "status-list-container">
+		      
+		    </div>
+		    <div id = "status-detail-container">
+		        <iframe id="status-detail" frameborder="0" width="100%" height="100%"></iframe>
+		    </div>
+		</div>
+	</div>
+</body>
