@@ -1,8 +1,7 @@
-var restaurantID;
 
 $(document).ready(function() {
 
-    $("manager-restaurant-form").on("submit", function(e){
+    $("#manager-restaurant-form").on("submit", function(e){
         e.preventDefault()
             //todo: ajax to update user info
             let data = $(this).serialize();
@@ -24,7 +23,7 @@ function loadData(restaurant){
     $("input#name").val(restaurant.name);
     $("input#address").val(restaurant.address);
     $("input#phone").val(restaurant.phone);
-    $("input#open-time").val(restaurant.open-time);
-    $("input#close-time").val(restaurant.close-time);
+    $("input#open-time").val(restaurant.open_time);
+    $("input#close-time").val(restaurant.close_time);
     
 }
