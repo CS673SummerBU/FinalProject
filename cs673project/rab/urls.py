@@ -12,4 +12,5 @@ urlpatterns = [
     path('manager_status', views.manager_status, name='manager_status'),
     path('manager_employee', views.manager_employee, name='manager_employee'),
     path('manager_personal_update', views.manager_personal_update, name='manager_personal_update'),
+    path('manager_restaurant_update', views.manager_restaurant_update, name='manager_restaurant_update'),
 ]

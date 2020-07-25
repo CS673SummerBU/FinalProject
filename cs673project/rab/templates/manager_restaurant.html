@@ -6,14 +6,14 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/main.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/manager.css' %}">
 
-   	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'rab/js/manager_restaurant.js' %}"></script>
 </head>
 <body>
 	<div class="limiter">
         <div class="container-form">
 			<div class="wrap-form">
-				<form id="manager-restaurant-form" class="rastaurant-basic" method="POST" action="restaurant_update">
+				<form id="manager-restaurant-form" class="rastaurant-basic" method="POST" action="manager_restaurant_update">
 					{% csrf_token %}
 					<div class="wrap-input">
 					    <p>Name*</p>

@@ -2,9 +2,8 @@ var restaurantID;
 
 $(document).ready(function() {
 
-    $("#manager-restaurant-form").on("submit", function(e){
+    $("manager-restaurant-form").on("submit", function(e){
         e.preventDefault()
-        if(validatePassword()){
             //todo: ajax to update user info
             let data = $(this).serialize();
             let url = $(this).attr("action");
@@ -13,7 +12,6 @@ $(document).ready(function() {
                 loadData(result);
             },'json'
             );
-        }
     }); 
 
 
@@ -26,7 +24,7 @@ function loadData(restaurant){
     $("input#name").val(restaurant.name);
     $("input#address").val(restaurant.address);
     $("input#phone").val(restaurant.phone);
-    $("input#open-time").val(restaurant.openTime);
-    $("input#close-time").val(restaurant.closeTime);
+    $("input#open-time").val(restaurant.open-time);
+    $("input#close-time").val(restaurant.close-time);
     
 }
