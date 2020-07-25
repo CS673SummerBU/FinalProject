@@ -68,6 +68,13 @@ def manager_menu(request):
         return redirect('')
 
 @login_required
+def manager_menu_detail(request):
+    if(request.user.role.id == 1):
+        return render(request, 'manager_menu_detail.html')
+    else:
+        return redirect('')
+
+@login_required
 def manager_status(request):
     if(request.user.role.id == 1):
         return render(request, 'manager_status.html')
@@ -75,9 +82,23 @@ def manager_status(request):
         return redirect('')
 
 @login_required
+def manager_status_detail(request):
+    if(request.user.role.id == 1):
+        return render(request, 'manager_status_detail.html')
+    else:
+        return redirect('')
+
+@login_required
 def manager_employee(request):
     if(request.user.role.id == 1):
         return render(request, 'manager_employee.html')
+    else:
+        return redirect('')
+
+@login_required
+def manager_employee_detail(request):
+    if(request.user.role.id == 1):
+        return render(request, 'manager_employee_detail.html')
     else:
         return redirect('')
 

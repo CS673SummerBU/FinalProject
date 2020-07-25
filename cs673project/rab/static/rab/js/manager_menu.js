@@ -11,7 +11,7 @@ $(document).ready(function() {
     
     $("#add-item-btn").on("click", function(){
         sessionStorage.removeItem("dishID");
-        $("#menu-detail").attr("src", "manager_menu_detail.html");
+        $("#menu-detail").attr("src", "manager_menu_detail");
         $(".selected").removeClass("selected");
     });
 
@@ -36,7 +36,7 @@ function loadData(){
     let dishListRoot = $("#menu-list-container");
     
     Object.keys(dishes).forEach(key => {
-        dishListRoot.append('<div id = "dish-' + key + '" class="dish-item"><p>' + dishes[key].name + '</p><span id = "url" style="display: none">manager_menu_detail.html</span><span id = "dish-id" style = "display:none">' + dishes[key].id + '</span></div>');
+        dishListRoot.append('<div id = "dish-' + key + '" class="dish-item"><p>' + dishes[key].name + '</p><span id = "url" style="display: none">manager_menu_detail</span><span id = "dish-id" style = "display:none">' + dishes[key].id + '</span></div>');
     });
     
     dishListRoot.append('<div id = "add-item-container"><img id= "add-item-btn" src="rab/static/rab/resources/plus.png" alt="Click to add an item"></div>');
