@@ -7,6 +7,8 @@ $(document).ready(function() {
     console.log(sessionStorage.getItem("dishID"));
     if(dishID){
         loadData();
+    }else{
+        $("#delete-btn").css("display", "none");
     }
 
     $("#serve-dish").on("change", function(){
@@ -38,6 +40,7 @@ $(document).ready(function() {
             console.log("save dish");
             
             //todo: set dishID on success
+            parent.loadData();
         }else{
             alert("Dish Info Not Complete!!");
         }
@@ -47,6 +50,7 @@ $(document).ready(function() {
     $("#delete-btn").on("click", function(){
         //todo: ajax to delete the dish
         console.log("delete dish");
+        parent.loadData();
     });
     
     $("input#food-image").on("change", function(event){
@@ -66,7 +70,6 @@ $(document).ready(function() {
 });
 
 function loadData(){
-    console.log("load");
     
     //todo: ajax to retrieve dish info by id
     let dish = {
@@ -106,3 +109,4 @@ function validateDish(){
     
     return true;
 }
+

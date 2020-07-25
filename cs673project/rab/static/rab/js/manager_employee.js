@@ -1,13 +1,6 @@
 $(document).ready(function() {
     
     loadData();
-    
-    $(".employee-item").on("click", function(){
-        sessionStorage.setItem("employeeID", $(this).children("span#dish-id").text());
-        $("#employee-detail").attr("src", $(this).children("span#url").text());
-        $(".selected").removeClass("selected");
-        $(this).addClass("selected");
-    });
 
      $("#add-item-btn").on("click", function(){
         sessionStorage.removeItem("employeeID");
@@ -17,7 +10,6 @@ $(document).ready(function() {
 });
 
 function loadData(){
-    console.log("load");
     
     //todo: ajax to load the list of dishes
     //sample return:
@@ -32,11 +24,17 @@ function loadData(){
         name: "Gloria Hernandez"}
     };
     
-    let employeeListRoot = $("#employee-list-container");
+    let employeeListRoot = $("#employee-list-items-container");
+    employeeListRoot.empty();
     
     Object.keys(employees).forEach(key => {
         employeeListRoot.append('<div id = "employee-' + key + '" class="employee-item"><p>' + employees[key].name + '</p><span id = "url" style="display: none">manager_employee_detail</span><span id = "dish-id" style = "display:none">' + employees[key].id + '</span></div>');
     });
     
-    employeeListRoot.append('<div id = "add-item-container"><img id= "add-item-btn" src="../resources/plus.png" alt="Click to add an item"></div>');
+    $(".employee-item").on("click", function(){
+        sessionStorage.setItem("employeeID", $(this).children("span#dish-id").text());
+        $("#employee-detail").attr("src", $(this).children("span#url").text());
+        $(".selected").removeClass("selected");
+        $(this).addClass("selected");
+    });
 }

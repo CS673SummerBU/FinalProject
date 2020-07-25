@@ -1,29 +1,33 @@
+var employeeID;
+
 $(document).ready(function() {
     
     employeeID = sessionStorage.getItem("employeeID");
     if(employeeID){
-        loadData();
-        $("#save-btn").on("click", function(){
-        if(validateInfo()){
-            //todo: ajax to update employee info
-            
-            //on success: loadData()
-        }
-    });
+        loadData();  
     }else{
-        $("#save-btn").on("click", function(){
+        $("#delete-btn").css("display", "none");
+    }
+    
+    $("#save-btn").on("click", function(){
         if(validateInfo()){
-            //todo: ajax to add new employee
+            //todo: ajax to add/update employee info
             
             //on success: loadData()
+            parent.loadData();
         }
     });
-    }
+    
+    $("#delete-btn").on("click", function(){
+        //todo: ajax to delete the employee
+        console.log("delete employee");
+        sessionStorage.setItem("employeeID", null);
+        parent.loadData();
+    });
 
 });
 
 function loadData(){
-    console.log("load");
     
     //todo: ajax to retrieve dish info by id
     let employee = {
