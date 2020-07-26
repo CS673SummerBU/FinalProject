@@ -1,4 +1,4 @@
-from ..models import User, Restaurant
+from ..models import User, Restaurant, Dish, Menu
 from django.db import transaction
 
 
@@ -15,5 +15,16 @@ def create_user(username, password, role):
 
 def create_restaurant():
     restaurant = Restaurant()
+    create_menu(restaurant_id)
     restaurant.save()
     return restaurant.id
+
+def create_dish(name, cook_time, fresh_time, image, res_id, serve):
+    dish = Dish(name = name, cook_time = cook_time, fresh_time = fresh_time, image = image, restaurant = res_id, serve = serve)
+    dish.save()
+    return dish
+
+def create_menu():
+    menu = Menu()
+    menu.save()
+    return menu

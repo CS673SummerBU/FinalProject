@@ -14,8 +14,21 @@ class Role(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
 class User(AbstractUser):
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE) #becomes role_id in database
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE) #becomes restaurant_id in database
+
+STATUS_CHOICES = (
+    ("0","Not Made"),
+    ("1","Cooking"),
+    ("2","Ready to Serve"),
+    ("3","Served"),
+    ("4","Requested")
+)
+
+SERVE_CHOICES = (
+    ("0","No"),
+    ("1","Yes"),
+)
 
 
 class Dish(models.Model):
@@ -25,6 +38,8 @@ class Dish(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     image = models.BinaryField(blank=True)
     description = models.CharField(max_length=100)
+    serve = models.CharField(default="0", max_length=2, choices=SERVE_CHOICES)
+    #status = models.CharField(default="0", max_length=2, choices=STATUS_CHOICES)
 
 class Menu(models.Model):
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
