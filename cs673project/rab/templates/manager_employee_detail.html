@@ -7,13 +7,14 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/manager.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/menu.css' %}">
 	
-    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'rab/js/manager_employee_detail.js' %}"></script>
 	
 </head>
 <body>
 	<div class="limiter">
-        <form class="personal-info">
+        <form id="manager-employee-info" class="personal-info" method="POST" action="employee_update">
+			{% csrf_token %}
 					<div class="wrap-input">
 					    <p>Firstname*</p>
 						<input id = "firstname" class="input" type="text" name="firstname" placeholder="Firstname">
@@ -27,6 +28,15 @@
 					<div class="wrap-input">
 					    <p>Email/Username*</p>
 						<input id = "username" class="input" type="email" name="username" placeholder="Username">
+					</div>
+
+					<div class="wrap-input">
+					    <p>Role</p>
+						<select name="role" id="role" class="input">
+							<option  value="2">Waiter</option>
+							<option  value="3">Cook</option>
+							<option  value="1">Manager</option>
+						</select>
 					</div>
 					
 					<div class="wrap-input">
@@ -48,7 +58,7 @@
                             Delete
                         </button>
 					</div>
-				</form>
+		</form>
 	</div>
 </body>
 
