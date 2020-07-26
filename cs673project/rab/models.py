@@ -17,7 +17,6 @@ class User(AbstractUser):
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
 
-
 class Dish(models.Model):
     name = models.CharField(max_length=100)
     cook_time = models.IntegerField(default=0)

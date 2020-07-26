@@ -34,7 +34,7 @@ function loadData(){
         dishListRoot.append('<div id = "dish-' + key + '" class="dish-item"><p>' + dishes[key].name + '</p><span id = "url" style="display: none">manager_menu_detail</span><span id = "dish-id" style = "display:none">' + dishes[key].id + '</span></div>');
         if(sessionStorage.getItem("dishID") == dishes[key].id){
             $("#" + 'dish-' + key).addClass("selected");
-            $("#menu-detail").attr("src", "manager_menu_detail.html");
+            $("#menu-detail").attr("src", "manager_menu_detail");
         }
     }); 
     

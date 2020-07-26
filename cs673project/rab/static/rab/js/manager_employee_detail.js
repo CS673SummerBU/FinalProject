@@ -4,41 +4,65 @@ $(document).ready(function() {
     
     employeeID = sessionStorage.getItem("employeeID");
     if(employeeID){
-        loadData();  
+        getEmployee(employeeID); 
     }else{
         $("#delete-btn").css("display", "none");
     }
     
-    $("#save-btn").on("click", function(){
+    $("#save-btn").on("click", function(e){
         if(validateInfo()){
-            //todo: ajax to add/update employee info
-            
+            if(employeeID){
+                $("<input />").attr("type", "hidden")
+                .attr("name", "employeeID")
+                .attr("value", employeeID)
+                .appendTo("#manager-employee-info");
+            }
+            let data = $('#manager-employee-info').serialize();
+            let url = $('#manager-employee-info').attr("action");
+            //let form = $(this)
+            $.post(url, data, (result) => {
+                loadData(result);
+                parent.getEmployees();
+            },'json'
+            );
             //on success: loadData()
-            parent.loadData();
+            //parent.loadData();
+            
         }
     });
     
     $("#delete-btn").on("click", function(){
         //todo: ajax to delete the employee
-        console.log("delete employee");
-        sessionStorage.setItem("employeeID", null);
-        parent.loadData();
+        $.get("employee_delete",{employeeID: employeeID}, (result) => {
+            sessionStorage.removeItem("employeeID");
+            employeeID = undefined;
+            location.reload();
+            parent.getEmployees();
+            console.log("delete employee");
+        });
     });
 
 });
 
-function loadData(){
-    
-    //todo: ajax to retrieve dish info by id
-    let employee = {
-        firstName: "Ali",
-        lastName: "Baba",
-        username: "babaa@bu.edu"
-    };
-    
+var getEmployee = (employeeID) => {
+    $.get('employees', {employeeID: employeeID}, (employee) => {
+        loadData(employee)
+    });
+}
+
+function loadData(employee){
+    if(employeeID == undefined) {
+        $("#delete-btn").css("display", "");
+        sessionStorage.setItem("employeeID", employee.id);
+        employeeID = employee.id;
+    }
+    employeeID = employee.id
     $("input#firstname").val(employee.firstName);
     $("input#lastname").val(employee.lastName);
     $("input#username").val(employee.username);
+    $('select#role').val(employee.role);
+    $("input#password").val("");
+    $("input#password-cfm").val("");
     
 }
 

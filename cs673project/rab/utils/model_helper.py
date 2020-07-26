@@ -2,10 +2,11 @@ from ..models import User, Restaurant
 from django.db import transaction
 
 
-def create_user(username, password, role):
+def create_user(username, password, role, res_id=None):
     try:
         with transaction.atomic():
-            res_id = create_restaurant()
+            if(role == 1):
+                res_id = create_restaurant()
             user = User(username=username, is_superuser=False, is_active=True, is_staff=False, role_id=role, restaurant_id = res_id )
             user.set_password(password)
             user.save()

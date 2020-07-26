@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login
@@ -31,9 +31,12 @@ def login_user(request):
     username = request.POST['username']
     password = request.POST['pass']
     user = authenticate(username = username, password = password)
-    if user is not None:
+    if (user is not None):
         login(request, user)
-        return redirect('manager')
+        if (user.role.id == 1):
+            return redirect('manager')
+        if (user.role.id != 1):
+            return HttpResponse('placeholder!')
     else:
         return redirect('')     
 
@@ -116,9 +119,7 @@ def manager_personal_update(request):
     user.save()
     login(request, user)
     data = {"firstname": first_name, "lastname": last_name, "username": username}
-    #return redirect('manager_personal')
-    return HttpResponse(json.dumps(data))
-    #return render(request, 'manager_personal.html')
+    return JsonResponse(data)
 
 @require_http_methods(['POST'])
 def manager_restaurant_update(request):
@@ -135,6 +136,65 @@ def manager_restaurant_update(request):
     restaurant.close_time = close_time
     restaurant.save()
     data = {"name": name, "address": address, "phone": phone, "open_time": open_time, "close_time": close_time}
-    #return redirect('manager_personal')
-    return HttpResponse(json.dumps(data))
-    #return render(request, 'manager_personal.html')
+    return JsonResponse(data)
+
+
+@require_http_methods(['GET'])
+def employees(request):
+    restaurant_id=request.user.restaurant.id
+    if(request.GET.get('employeeID',None) is not None):
+        employees = User.objects.filter(restaurant=restaurant_id)
+        employee = get_object_or_404(employees, id=request.GET['employeeID'])
+        if(employee is None):
+            return
+        data =  {"id": employee.id, "firstName": employee.first_name, "lastName": employee.last_name, "username": employee.username, "role": employee.role_id}
+    else:
+        employees = User.objects.filter(restaurant=restaurant_id).exclude(id=request.user.id)
+        id = 0
+        data = {}
+        for emp in employees:
+            data[id] = {"id": emp.id, "name": emp.get_full_name()}
+            id += 1
+    return JsonResponse(data)
+
+
+@require_http_methods(['POST'])
+def employee_update(request):
+    restaurant_id=request.user.restaurant.id
+    employee_id = request.POST.get('employeeID',None)
+    username = request.POST['username']
+    first_name = request.POST['firstname']
+    last_name = request.POST['lastname']
+    password = request.POST['pass']
+    role_id = request.POST['role']
+    employee = None
+    if(employee_id is not None):
+        employees = User.objects.filter(restaurant=restaurant_id)
+        employee = get_object_or_404(employees, id=employee_id)
+        employee.first_name = first_name
+        employee.last_name = last_name
+        employee.username = username
+        employee.role_id = role_id
+        employee.set_password(password)
+        employee.save()
+    else:
+        if validate_registration(username, password):
+            employee = create_user(username,password,role_id,restaurant_id)
+            employee.first_name = first_name
+            employee.last_name = last_name
+            employee.save()
+    data =  {"id": employee.id, "firstName": employee.first_name, "lastName": employee.last_name, "username": employee.username, "role": employee.role_id}
+    return JsonResponse(data)
+
+@require_http_methods(['GET'])
+def employee_delete(request):
+    restaurant_id=request.user.restaurant.id
+    employee_id=request.GET['employeeID']
+    print(employee_id)
+    employees = User.objects.filter(restaurant=restaurant_id)
+    employee = get_object_or_404(employees, id=employee_id)
+    employee.delete()
+    return HttpResponse("")
+
+
+
