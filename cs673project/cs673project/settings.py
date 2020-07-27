@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'cs673project.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 #mysql
-DATABASES_David = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME' : 'rab',
@@ -86,16 +86,17 @@ DATABASES_David = {
     }
 }
 
+
 #mysql
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'restaurant_automation_buffet', #needs changing based on your NAME for database
-        'USER' : 'root',
-        'PASSWORD' : 'CS6732020',
-        'HOST' : '127.0.0.1'
-    }
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME' : 'restaurant_automation_buffet', #needs changing based on your NAME for database
+#        'USER' : 'root',
+#        'PASSWORD' : 'CS6732020',
+#        'HOST' : '127.0.0.1'
+#    }
+#}
 
 ##sqllite
 #DATABASES = {
