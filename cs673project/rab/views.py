@@ -136,6 +136,12 @@ def manager_restaurant_update(request):
     restaurant.close_time = close_time
     restaurant.save()
     data = {"name": name, "address": address, "phone": phone, "open_time": open_time, "close_time": close_time}
+<<<<<<< Updated upstream
+=======
+    #return redirect('manager_personal')
+    return HttpResponse(json.dumps(data))
+    #return render(request, 'manager_personal.html')
+>>>>>>> Stashed changes
     return JsonResponse(data)
 
 
@@ -253,3 +259,10 @@ def dish_delete(request):
     dish = get_object_or_404(dishes, id=dish_id)
     dish.delete()
     return HttpResponse("")
+<<<<<<< Updated upstream
+=======
+
+
+
+
+>>>>>>> Stashed changes
