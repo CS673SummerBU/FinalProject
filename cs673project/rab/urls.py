@@ -16,4 +16,10 @@ urlpatterns = [
     path('manager_employee_detail', views.manager_employee_detail, name='manager_employee_detail'),
     path('manager_personal_update', views.manager_personal_update, name='manager_personal_update'),
     path('manager_restaurant_update', views.manager_restaurant_update, name='manager_restaurant_update'),
+    path('employees', views.employees, name='employees'),
+    path('employee_update', views.employee_update, name='employee_update'),
+    path('employee_delete', views.employee_delete, name='employee_delete'),
+    path('dishes', views.dishes, name='dishes'),
+    path('dish_update', views.dish_update, name='dish_update'),
+    path('dish_delete', views.dish_delete, name='dish_delete'),
 ]

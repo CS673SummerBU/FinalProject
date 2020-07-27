@@ -13,48 +13,56 @@
 </head>
 <body>
 	<div class="limiter">
-        <form id="manager-dish-info" class = "personal-info" method="POST" action="dish_update">
-            {% csrf_token %}
-                <div class="wrap-input">
-                    <p>Display Name*</p>
-                    <input id = "display-name" class="input" type="text" name="display-name" placeholder="Name" required="required">
-                </div>
+            <form id="manager-dish-info" class = "personal-info" method="POST" action="dish_update">
+                {% csrf_token %}
 
-                <div class="wrap-input">
-                    <p>Cook Time (min)</p>
-                    <input id = "cook-time" class="input" type="number" name="cook-time" placeholder="00" required="required">
-                </div>
+                    <div class="wrap-input">
+                        <p>Display Name*</p>
+                        <input id = "display-name" class="input" type="text" name="display-name" placeholder="Name" required="required">
+                    </div>
 
-                <div class="wrap-input">
-                    <p>Fresh Time (min)</p>
-                    <input id = "fresh-time" class="input" type="number" name="fresh-time" placeholder="00" required="required">
-                </div>
+                    <div class="wrap-input">
+                        <p>Cook Time (min)</p>
+                        <input id = "cook-time" class="input" type="number" name="cook-time" placeholder="00" required="required">
+                    </div>
 
-                <div class="wrap-input">
-                    <p>Food Image</p>
-                    <input id = "food-image" class="input" type="file" name="food-image" accept="image/jpeg,image/x-png">
-                    <img id = "current-food-image" src="{% static 'rab/resources/shrimp-cocktail.jpg' %}" alt="" width="100px" height="100px">
-                </div>
-                
-                <div class="wrap-input">
-                    <p>Serving</p>
-                    <select name = "serve" id="serve" class="input">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </label>
-                </div>
+                    <div class="wrap-input">
+                        <p>Fresh Time (min)</p>
+                        <input id = "fresh-time" class="input" type="number" name="fresh-time" placeholder="00" required="required">
+                    </div>
 
-                <div class="container-form-btn">
-                    <button id="save-btn" class="form-btn" type="button">
-                        Save
-                    </button>
-                    <button id="delete-btn" class="form-btn" type="button">
-                        Delete
-                    </button>
-                </div>
+                    <div class="wrap-input">
+                        <p>Food Image</p>
+                        <input id = "food-image" class="input" type="file" name="food-image" accept="image/jpeg,image/x-png">
+                        <img id = "current-food-image" src="{% static 'rab/resources/shrimp-cocktail.jpg' %}" alt="" width="100px" height="100px">
+                    </div>
 
-
-        </form>
+                    <div class="wrap-input">
+                        <p>Serving</p>
+                        <select name = "serve" id="serve" class="input">
+                            <option value="False">No</option>
+                            <option value="True">Yes</option>
+                        </select>
+                    </div>
+                 
+                    <div class="container-form-btn">
+                        <button id="save-btn" class="form-btn" type="button">
+                            Save
+                        </button>
+                        <button id="delete-btn" class="form-btn" type="button">
+                            Delete
+                        </button>
+                    </div>
+                    
+                    <!-- Rounded switch 
+                    <div style="margin: 40px auto;">
+                        <p style="font-size: 20px;">Serve This Dish</p>
+                        <label class="switch">
+                            <input id = "serve-dish" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>-->
+            </form>
     </div>
 </body>
 

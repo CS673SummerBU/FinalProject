@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .utils.validation import validate_registration, validate_dish_input
-from .utils.model_helper import create_user, create_dish
-from .models import User, Restaurant, Role, Dish
+from .utils.model_helper import create_user, create_dish, create_menu
+from .models import User, Restaurant, Role, Dish, Menu
 import json
 # Create your views here.
 
@@ -31,9 +31,12 @@ def login_user(request):
     username = request.POST['username']
     password = request.POST['pass']
     user = authenticate(username = username, password = password)
-    if user is not None:
+    if (user is not None):
         login(request, user)
-        return redirect('manager')
+        if (user.role.id == 1):
+            return redirect('manager')
+        if (user.role.id != 1):
+            return HttpResponse('placeholder!')
     else:
         return redirect('')     
 
@@ -116,9 +119,7 @@ def manager_personal_update(request):
     user.save()
     login(request, user)
     data = {"firstname": first_name, "lastname": last_name, "username": username}
-    #return redirect('manager_personal')
-    return HttpResponse(json.dumps(data))
-    #return render(request, 'manager_personal.html')
+    return JsonResponse(data)
 
 @require_http_methods(['POST'])
 def manager_restaurant_update(request):
@@ -135,11 +136,6 @@ def manager_restaurant_update(request):
     restaurant.close_time = close_time
     restaurant.save()
     data = {"name": name, "address": address, "phone": phone, "open_time": open_time, "close_time": close_time}
-<<<<<<< Updated upstream
-    #return redirect('manager_personal')
-    return HttpResponse(json.dumps(data))
-    #return render(request, 'manager_personal.html')
-=======
     return JsonResponse(data)
 
 
@@ -161,7 +157,6 @@ def employees(request):
             id += 1
     return JsonResponse(data)
 
-
 @require_http_methods(['GET'])
 def dishes(request):
     restaurant_id=request.user.restaurant.id
@@ -177,7 +172,6 @@ def dishes(request):
             data[id] = {"id": dis.id, "name": dis.name}
             id += 1
     return JsonResponse(data)
-
 
 @require_http_methods(['POST'])
 def employee_update(request):
@@ -233,6 +227,11 @@ def dish_update(request):
             dish.cook_time = cook_time
             dish.fresh_time = fresh_time
             dish.save()
+    
+    menu = Menu.objects.filter(restaurant = restaurant_id)
+    menu.dish.add(dish)
+    menu.save()
+    
     data =  {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image}
     return JsonResponse(data)
 
@@ -254,8 +253,3 @@ def dish_delete(request):
     dish = get_object_or_404(dishes, id=dish_id)
     dish.delete()
     return HttpResponse("")
-
-
-
-
->>>>>>> Stashed changes
