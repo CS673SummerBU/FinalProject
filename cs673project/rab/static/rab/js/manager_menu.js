@@ -1,8 +1,6 @@
 $(document).ready(function() {
     
-    loadData();
-    
-
+    getDishes();
     
     $("#add-item-btn").on("click", function(){
         sessionStorage.removeItem("dishID");
@@ -12,20 +10,13 @@ $(document).ready(function() {
 
 });
 
+var getDishes = () => {
+    $.get('dishes', (dishes) => {
+        loadData(dishes)
+    });
+};
+
 function loadData(){
-    
-    //todo: ajax to load the list of dishes
-    //sample return:
-    let dishes = {
-        0:{id: 25,
-        name: "Beef Broccli"},
-        1:{id: 26,
-        name: "Shrimp Cocktail"},
-        2:{id: 29,
-        name: "Kong Pao Chicken"},
-        3:{id: 41,
-        name: "French Fries"}
-    };
     
     let dishListRoot = $("#menu-list-items-container");
     dishListRoot.empty();
