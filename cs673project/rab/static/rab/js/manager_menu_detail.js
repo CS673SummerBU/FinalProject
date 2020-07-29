@@ -27,8 +27,21 @@ $(document).ready(function() {
         }
     });
     */
-    $("#save-btn").on("click", function(){
-        
+    $("#save-btn").on("click", function(e){
+        $.ajax({
+            type: "POST",
+            url: $('#manager-dish-info').attr("action"),
+            data: new FormData($('#manager-dish-info')[0]),
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $("#divider").html(data);
+                loadData(data);
+                parent.getDishes();
+            }
+        });
+
+        /*
         if(validateDish()){
             if(dishID) {
                 $("<input />").attr("type","hidden")
@@ -44,6 +57,7 @@ $(document).ready(function() {
             },'json'
             );
         }
+        */
     });
     
     $("#delete-btn").on("click", function(){
@@ -88,7 +102,7 @@ function loadData(){
     $("input#display-name").val(dish.name); //first part is <id
     $("input#cook-time").val(dish.cookTime);
     $("input#fresh-time").val(dish.freshTime);
-    $("input#serve").val(dish.serve);
+    $("select#serve").val(dish.serve);
     
     if(dish.foodImageUrl != null){
         $("img#current-food-image").prop("src", dish.foodImageUrl);

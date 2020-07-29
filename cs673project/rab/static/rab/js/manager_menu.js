@@ -4,7 +4,7 @@ $(document).ready(function() {
     
     $("#add-item-btn").on("click", function(){
         sessionStorage.removeItem("dishID");
-        $("#menu-detail").attr("src", "manager_menu_detail");
+        $("#dish-detail").attr("src", "manager_menu_detail");
         $(".selected").removeClass("selected");
     });
 
@@ -16,22 +16,22 @@ var getDishes = () => {
     });
 };
 
-function loadData(){
+function loadData(dishes){
     
-    let dishListRoot = $("#menu-list-items-container");
+    let dishListRoot = $("#dish-list-items-container"); //changed <div id=> in manager_menu.html
     dishListRoot.empty();
     
     Object.keys(dishes).forEach(key => {
         dishListRoot.append('<div id = "dish-' + key + '" class="dish-item"><p>' + dishes[key].name + '</p><span id = "url" style="display: none">manager_menu_detail</span><span id = "dish-id" style = "display:none">' + dishes[key].id + '</span></div>');
         if(sessionStorage.getItem("dishID") == dishes[key].id){
             $("#" + 'dish-' + key).addClass("selected");
-            $("#menu-detail").attr("src", "manager_menu_detail");
+            $("#dish-detail").attr("src", "manager_menu_detail"); //changed <div id=> in manager_menu.html
         }
     }); 
     
     $(".dish-item").on("click", function(){
         sessionStorage.setItem("dishID", $(this).children("span#dish-id").text());
-        $("#menu-detail").attr("src", $(this).children("span#url").text());
+        $("#dish-detail").attr("src", $(this).children("span#url").text()); //changed <div id=> in manager_menu.html
         $(".selected").removeClass("selected");
         $(this).addClass("selected");
     });

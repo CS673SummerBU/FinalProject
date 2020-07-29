@@ -15,20 +15,21 @@ def create_user(username, password, role, res_id=None):
         print('error')
 
 def create_restaurant():
-    restaurant = Restaurant()
+    restaurant = Restaurant.objects.create()
     restaurant.save()
+    #create_menu(restaurant)
     return restaurant.id
 
 def create_dish(name, cook_time, fresh_time, image, res_id, serve):
-    dish = Dish(name = name, cook_time = cook_time, fresh_time = fresh_time, image = image, restaurant = res_id, serve = serve)
+    dish = Dish(name = name, cook_time = cook_time, fresh_time = fresh_time, image = image, restaurant_id = res_id, serve = serve)
     dish.save()
-    if (serve):
-        menu = Menu.objects.filter(restaurant_ = restaurant_id)
-        menu.dish.add(dish)
+    if (serve == 1):
+        restaurant = Restaurant.objects.filter(restaurant = res_id)
+        menu = Menu(restaurant = restaurant, dish = dish)
         menu.save()
     return dish
 
-def create_menu(res_id):
-    menu = Menu(restaurant_id = res_id)
-    menu.save()
-    return menu
+#def create_menu(res_id):
+#    menu = Menu(restaurant = res_id)
+#    menu.save()
+#    return

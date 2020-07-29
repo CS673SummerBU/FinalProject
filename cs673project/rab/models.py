@@ -15,21 +15,21 @@ class Role(models.Model):
 
 class User(AbstractUser):
     role = models.ForeignKey(Role, on_delete=models.CASCADE) #role_id in database
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE) #restaurant_id in database
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, default = None) #restaurant_id in database
 
 class Dish(models.Model):
     name = models.CharField(max_length=100)
     cook_time = models.IntegerField(default=0)
     fresh_time = models.IntegerField(default=0)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
-    image = models.BinaryField(blank=True)
+    image = models.ImageField(upload_to='resources',blank=True,null=True)
     #description = models.CharField(max_length=100)
-    serve = models.BooleanField(default=False)
+    serve = models.IntegerField(default=0)
 
 class Menu(models.Model):
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, default=None)
     last_served = models.DateTimeField(null=True)
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE,default = None)
 
 class Orders(models.Model):
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
