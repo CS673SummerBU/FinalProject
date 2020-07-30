@@ -28,19 +28,24 @@ $(document).ready(function() {
     });
     */
     $("#save-btn").on("click", function(e){
-        $.ajax({
-            type: "POST",
-            url: $('#manager-dish-info').attr("action"),
-            data: new FormData($('#manager-dish-info')[0]),
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                $("#divider").html(data);
-                loadData(data);
-                parent.getDishes();
-            }
-        });
+        if(validateDish()) {
+            var formData = new FormData($('#manager-dish-info').get(0));
+            console.log(formData)
 
+            $.ajax({
+                url: $('#manager-dish-info').attr("action"),
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (data) {
+                    console.log('success')
+                    loadData(data);
+                    parent.getDishes();
+                }
+            });
+        }
+        
         /*
         if(validateDish()){
             if(dishID) {

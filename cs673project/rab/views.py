@@ -210,16 +210,18 @@ def dish_update(request):
     name = request.POST['display-name']
     cook_time = request.POST['cook-time']
     fresh_time = request.POST['fresh-time']
-    image = request.POST['food-image']
-    serve = int(request.POST['serve'])
+    image = request.FILES.get('food-image',None)
+    serve = request.POST['serve']
     dish = None
+    print(type(image.name))
+    print(type(image))
     if(dish_id is not None):
         dishes = Dish.objects.filter(restaurant_id=restaurant) #restaurant_id?
         dish = get_object_or_404(dishes, id=dish_id)
         dish.name = name
         dish.cook_time = cook_time
         dish.fresh_time = fresh_time
-        dish.image = image
+        dish.image = image.name
         dish.serve = serve
         dish.save()
     else:
@@ -240,7 +242,7 @@ def dish_update(request):
     #    menu.save()
 
     data =  {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image, "serve":dish.serve}
-    return JsonResponse(data)
+    return HttpResponse(data)
 
 @require_http_methods(['GET'])
 def employee_delete(request):
