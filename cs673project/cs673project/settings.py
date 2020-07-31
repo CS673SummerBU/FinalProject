@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'cs673project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'restaurant_automation_buffet', #needs changing based on your NAME for database
-        'USER' : 'root',
-        'PASSWORD' : 'CS6732020',
+        'NAME' : 'rab',
+        'USER' : 'cs673user',
+        'PASSWORD' : 'cs673user',
         'HOST' : '127.0.0.1'
     }
 }
