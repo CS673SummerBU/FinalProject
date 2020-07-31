@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .utils.validation import validate_registration, validate_dish_input
 from .utils.model_helper import create_user ,create_dish, create_menu
@@ -39,6 +39,11 @@ def login_user(request):
             return HttpResponse('placeholder!')
     else:
         return redirect('')     
+
+@require_http_methods(['GET'])
+def logout_user(request):
+    logout(request)
+    return render(request, 'login.html')
 
 @login_required
 def manager(request):
