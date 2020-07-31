@@ -29,6 +29,7 @@ class Dish(models.Model):
 class Menu(models.Model):
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE, default=None)
     last_served = models.DateTimeField(null=True)
+    order_state = models.CharField(max_length=50, unique = True, default = "NO ORDER PLACED")
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE,default = None)
 
 class Orders(models.Model):

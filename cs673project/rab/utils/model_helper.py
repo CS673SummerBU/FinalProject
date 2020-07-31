@@ -23,13 +23,9 @@ def create_restaurant():
 def create_dish(name, cook_time, fresh_time, image, res_id, serve):
     dish = Dish(name = name, cook_time = cook_time, fresh_time = fresh_time, image = image, restaurant_id = res_id, serve = serve)
     dish.save()
-    if (serve == 1):
-        restaurant = Restaurant.objects.filter(restaurant = res_id)
-        menu = Menu(restaurant = restaurant, dish = dish)
-        menu.save()
     return dish
 
-#def create_menu(res_id):
-#    menu = Menu(restaurant = res_id)
-#    menu.save()
-#    return
+def create_menu(restaurant_id, dish_id):
+    menu = Menu(restaurant_id = restaurant_id, dish_id = dish_id)
+    menu.save()
+    return menu

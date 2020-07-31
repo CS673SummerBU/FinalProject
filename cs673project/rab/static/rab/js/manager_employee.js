@@ -15,7 +15,6 @@ var getEmployees = () => {
     });
 };
 
-
 function loadData(employees){
     
     let employeeListRoot = $("#employee-list-items-container"); //<div id=> name in manager_employee.html

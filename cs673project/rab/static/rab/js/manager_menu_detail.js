@@ -1,4 +1,4 @@
-var dishID = null;
+var dishID;
 var foodImage = null;
 
 $(document).ready(function() {
@@ -29,8 +29,15 @@ $(document).ready(function() {
     */
     $("#save-btn").on("click", function(e){
         if(validateDish()) {
+            if(dishID){
+                $("<input />").attr("type", "hidden")
+                .attr("name", "dishID")
+                .attr("value", dishID)
+                .appendTo("#manager-dish-info");
+            }
             var formData = new FormData($('#manager-dish-info').get(0));
-            console.log(formData)
+            console.log('prior to ajax code:')
+            console.log(dishID)
 
             $.ajax({
                 url: $('#manager-dish-info').attr("action"),
@@ -39,7 +46,8 @@ $(document).ready(function() {
                 contentType: false,
                 type: "POST",
                 success: function (data) {
-                    console.log('success')
+                    console.log('after success:')
+                    console.log(dishID)
                     loadData(data);
                     parent.getDishes();
                 }
@@ -89,6 +97,7 @@ $(document).ready(function() {
     }
     });
 
+
 });
 
 var getDish = (dishID) => {
@@ -97,12 +106,17 @@ var getDish = (dishID) => {
     });
 }
 
-function loadData(){
+function loadData(dish){
+    console.log('after loadData call:')
+    console.log(dishID)
     if (dishID == undefined) {
         $("#delete-btn").css("display", "");
         sessionStorage.setItem("dishID", dish.id);
         dishID = dish.id;
     }
+    console.log('after loadData + dishID == undefined call:')
+    console.log(dishID)
+
     dishID = dish.id
     $("input#display-name").val(dish.name); //first part is <id
     $("input#cook-time").val(dish.cookTime);
@@ -113,10 +127,7 @@ function loadData(){
         $("img#current-food-image").prop("src", dish.foodImageUrl);
         $("img#current-food-image").show();
     }
-    
-    if(dish.menuID != null){
-        $("#serve-dish").prop("checked", true);
-    }
+
 }
 
 function validateDish(){
