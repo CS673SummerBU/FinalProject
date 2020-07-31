@@ -56,6 +56,7 @@ function loadData(employee){
         sessionStorage.setItem("employeeID", employee.id);
         employeeID = employee.id;
     }
+
     employeeID = employee.id
     $("input#firstname").val(employee.firstName);
     $("input#lastname").val(employee.lastName);

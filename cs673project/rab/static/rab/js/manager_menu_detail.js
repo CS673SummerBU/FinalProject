@@ -1,16 +1,16 @@
-var dishID = null;
+var dishID;
 var foodImage = null;
 
 $(document).ready(function() {
     
     dishID = sessionStorage.getItem("dishID");
-    console.log(sessionStorage.getItem("dishID"));
+    //console.log(sessionStorage.getItem("dishID"));
     if(dishID){
-        loadData();
+        getDish(dishID);
     }else{
         $("#delete-btn").css("display", "none");
     }
-
+    /*
     $("#serve-dish").on("change", function(){
         let checked = $("#serve-dish").prop("checked");
         if(checked){
@@ -26,33 +26,63 @@ $(document).ready(function() {
             //todo: ajax to remove the dish from menu
         }
     });
-    
-    $("#save-btn").on("click", function(){
-        
-        if(validateDish()){
-            //ajax to save the dish
-            let name = $("input#display-name").val();
+    */
+    $("#save-btn").on("click", function(e){
+        if(validateDish()) {
+            if(dishID){
+                $("<input />").attr("type", "hidden")
+                .attr("name", "dishID")
+                .attr("value", dishID)
+                .appendTo("#manager-dish-info");
+            }
+            var formData = new FormData($('#manager-dish-info').get(0));
+            console.log('prior to ajax code:')
+            console.log(dishID)
 
-            let cookTime = $("input#cook-time").val();
-
-            let freshTime = $("input#fresh-time").val();
-
-            console.log("save dish");
-            
-            //todo: set dishID on success
-            parent.loadData();
-        }else{
-            alert("Dish Info Not Complete!!");
+            $.ajax({
+                url: $('#manager-dish-info').attr("action"),
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (data) {
+                    console.log('after success:')
+                    console.log(dishID)
+                    loadData(data);
+                    parent.getDishes();
+                }
+            });
         }
         
+        /*
+        if(validateDish()){
+            if(dishID) {
+                $("<input />").attr("type","hidden")
+                .attr("name","dishID")
+                .attr("value",dishID)
+                .appendTo("#manager-dish-info");
+            }
+            let data = $('#manager-dish-info').seralize();
+            let url = $('#manager-dish-info').attr("action");
+            $.post(url,data, (result) => {
+                loadData(result);
+                parent.getDishes();
+            },'json'
+            );
+        }
+        */
     });
     
     $("#delete-btn").on("click", function(){
-        //todo: ajax to delete the dish
-        console.log("delete dish");
-        parent.loadData();
+        $.get("dish_delete", {dishID: dishID}, (result) => {
+            sessionStorage.removeItem("dishID");
+            dishID = undefined;
+            location.reload();
+            parent.getDishes();
+            console.log("delete dish");
+        });
     });
-    
+
     $("input#food-image").on("change", function(event){
         let tgt = event.target || window.event.srcElement;
         let files = tgt.files;
@@ -67,43 +97,50 @@ $(document).ready(function() {
     }
     });
 
+
 });
 
-function loadData(){
-    
-    //todo: ajax to retrieve dish info by id
-    let dish = {
-        name: "Shrimp Cocktail",
-        cookTime: 15,
-        freshTime: 60,
-        foodImageUrl: "../resources/shrimp-cocktail.jpg",
-        menuID: 32
-    };
-    
-    $("input#display-name").val(dish.name);
-    
+var getDish = (dishID) => {
+    $.get('dishes', {dishID: dishID}, (dish) => {
+        loadData(dish)
+    });
+}
+
+function loadData(dish){
+    console.log('after loadData call:')
+    console.log(dishID)
+    if (dishID == undefined) {
+        $("#delete-btn").css("display", "");
+        sessionStorage.setItem("dishID", dish.id);
+        dishID = dish.id;
+    }
+    console.log('after loadData + dishID == undefined call:')
+    console.log(dishID)
+
+    dishID = dish.id
+    $("input#display-name").val(dish.name); //first part is <id
     $("input#cook-time").val(dish.cookTime);
-    
     $("input#fresh-time").val(dish.freshTime);
+    $("select#serve").val(dish.serve);
     
     if(dish.foodImageUrl != null){
         $("img#current-food-image").prop("src", dish.foodImageUrl);
         $("img#current-food-image").show();
     }
-    
-    if(dish.menuID != null){
-        $("#serve-dish").prop("checked", true);
-    }
+
 }
 
 function validateDish(){
     if($("input#display-name").val() == ""){
+        alert("Please enter Dish name!!")
         return false;
     }
     if($("input#cook-time").val() == ""){
+        alert("Please enter Cook Time!!")
         return false;
     }
     if($("input#fresh-time").val() == ""){
+        alert("Please enter Fresh Time!!")
         return false;
     }
     

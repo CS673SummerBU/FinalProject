@@ -1,46 +1,34 @@
 $(document).ready(function() {
     
-    loadData();
-    
-
+    getDishes();
     
     $("#add-item-btn").on("click", function(){
         sessionStorage.removeItem("dishID");
-        $("#menu-detail").attr("src", "manager_menu_detail");
+        $("#dish-detail").attr("src", "manager_menu_detail");
         $(".selected").removeClass("selected");
     });
 
 });
 
-function loadData(){
+var getDishes = () => {
+    $.get('dishes', (dishes) => {
+        loadData(dishes)
+    });
+};
+
+function loadData(dishes){
     
-    //todo: ajax to load the list of dishes
-    //sample return:
-    let dishes = {
-        0:{id: 25,
-        name: "Beef Broccli"},
-        1:{id: 26,
-        name: "Shrimp Cocktail"},
-        2:{id: 29,
-        name: "Kong Pao Chicken"},
-        3:{id: 41,
-        name: "French Fries"}
-    };
-    
-    let dishListRoot = $("#menu-list-items-container");
+    let dishListRoot = $("#dish-list-items-container"); //changed <div id=> in manager_menu.html
     dishListRoot.empty();
     
     Object.keys(dishes).forEach(key => {
         dishListRoot.append('<div id = "dish-' + key + '" class="dish-item"><p>' + dishes[key].name + '</p><span id = "url" style="display: none">manager_menu_detail</span><span id = "dish-id" style = "display:none">' + dishes[key].id + '</span></div>');
-        if(sessionStorage.getItem("dishID") == dishes[key].id){
-            $("#" + 'dish-' + key).addClass("selected");
-            $("#menu-detail").attr("src", "manager_menu_detail");
-        }
+
     }); 
     
     $(".dish-item").on("click", function(){
         sessionStorage.setItem("dishID", $(this).children("span#dish-id").text());
-        $("#menu-detail").attr("src", $(this).children("span#url").text());
+        $("#dish-detail").attr("src", $(this).children("span#url").text()); //changed <div id=> in manager_menu.html
         $(".selected").removeClass("selected");
         $(this).addClass("selected");
     });

@@ -86,7 +86,6 @@ DATABASES = {
     }
 }
 
-
 ##sqllite
 #DATABASES = {
 #    'default': {

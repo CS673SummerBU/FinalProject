@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .utils.validation import validate_registration
-from .utils.model_helper import create_user
-from .models import User, Restaurant, Role
+from .utils.validation import validate_registration, validate_dish_input
+from .utils.model_helper import create_user ,create_dish, create_menu
+from .models import User, Restaurant, Role, Dish, Menu
 import json
 # Create your views here.
 
@@ -39,6 +39,11 @@ def login_user(request):
             return HttpResponse('placeholder!')
     else:
         return redirect('')     
+
+@require_http_methods(['GET'])
+def logout_user(request):
+    logout(request)
+    return render(request, 'login.html')
 
 @login_required
 def manager(request):
@@ -157,6 +162,63 @@ def employees(request):
             id += 1
     return JsonResponse(data)
 
+@require_http_methods(['GET'])
+def dishes(request):
+    restaurant_id=request.user.restaurant.id
+    if(request.GET.get('dishID',None) is not None):
+        dishes = Dish.objects.filter(restaurant_id=restaurant_id)
+        dish = get_object_or_404(dishes, id=request.GET['dishID'])
+        if (dish.image): 
+            data =  {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url, "serve":dish.serve}
+        else:
+            data =  {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "serve":dish.serve}
+    else:
+        dishes = Dish.objects.filter(restaurant_id=restaurant_id)
+        id = 0
+        data = {}
+        for dish in dishes:
+            data[id] = {"id": dish.id, "name": dish.name}
+            id += 1
+    return JsonResponse(data)
+
+
+@require_http_methods(['GET'])
+def menus(request):
+    restaurant_id=request.user.restaurant.id
+    if(request.GET.get('menuID',None) is not None):
+        menus = Menu.objects.filter(restaurant_id=restaurant_id)
+        menu = get_object_or_404(menus, id=request.GET['menuID'])
+        dishes = Dish.objects.filter(restaurant_id =restaurant_id)
+        dish = get_object_or_404(dishes, id=menu.dish_id)
+        if (dish.image):
+            data =  {"id": menu.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url, "orderStatus" : menu.order_state}
+        else:
+            data =  {"id": menu.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "orderStatus" : menu.order_state}   
+    else:
+        menus = Menu.objects.filter(restaurant_id=restaurant_id)
+        id = 0
+        data = {}
+        for menu in menus:
+            data[id] = {"id": menu.id, "name": menu.dish.name}
+            id += 1
+    return JsonResponse(data)
+
+
+#@require_http_methods(['GET'])
+#def serve_dishes(request):
+#    restaurant_id=request.user.restaurant.id
+#    if(request.GET.get('menuID',None) is not None):
+#        dishes = Dish.objects.filter(restaurant_id=restaurant_id)
+#        dish = get_object_or_404(dishes, id=request.GET['dishID'])
+#        data =  {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url, "serve": dish.serve}
+#    else:
+#        dishes = Dish.objects.filter(restaurant_id=restaurant_id, serve = 1)
+#        id = 0
+#        data = {}
+#        for dish in dishes:
+#            data[id] = {"id": dish.id, "name": dish.name}
+#            id += 1
+#    return JsonResponse(data)
 
 @require_http_methods(['POST'])
 def employee_update(request):
@@ -186,6 +248,48 @@ def employee_update(request):
     data =  {"id": employee.id, "firstName": employee.first_name, "lastName": employee.last_name, "username": employee.username, "role": employee.role_id}
     return JsonResponse(data)
 
+@require_http_methods(['POST'])
+def dish_update(request):
+    #employee_id = request.POST.get('employeeID',None)
+    restaurant_id=request.user.restaurant.id
+    restaurant = request.user.restaurant
+    dish_id = request.POST.get('dishID',None)
+    name = request.POST['display-name']
+    cook_time = request.POST['cook-time']
+    fresh_time = request.POST['fresh-time']
+    image = request.FILES.get('food-image',None)
+    serve = request.POST['serve']
+    dish = None
+    if(dish_id is not None):
+        print('Went to if')
+        dishes = Dish.objects.filter(restaurant_id=restaurant) #restaurant_id?
+        dish = get_object_or_404(dishes, id=dish_id)
+        dish.name = name
+        dish.cook_time = cook_time
+        dish.fresh_time = fresh_time
+        dish.image = image
+        dish.serve = serve
+        dish.save()
+    else: #brand new dish
+        print('Went to else')
+        if validate_dish_input(name, cook_time, fresh_time):
+            dish = create_dish(name, cook_time, fresh_time, image, restaurant_id, serve) #restaurant_id?
+            dish.name = name
+            dish.cook_time = cook_time
+            dish.fresh_time = fresh_time
+            dish.save()
+    if (serve):
+        menu = create_menu(restaurant_id = restaurant_id, dish_id = dish.id)
+        menu.save()
+    else:
+        menu = Menu.objects.filter(restaurant_id = restaurant_id, dish_id = dish.id)
+        menu.delete()
+    if (image): 
+        data =  {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url, "serve":dish.serve}
+    else:
+        data =  {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "serve":dish.serve}
+    return HttpResponse(data)
+
 @require_http_methods(['GET'])
 def employee_delete(request):
     restaurant_id=request.user.restaurant.id
@@ -196,5 +300,11 @@ def employee_delete(request):
     employee.delete()
     return HttpResponse("")
 
-
-
+@require_http_methods(['GET'])
+def dish_delete(request):
+    restaurant_id=request.user.restaurant.id
+    dish_id=request.GET['dishID']
+    dishes = Dish.objects.filter(restaurant=restaurant_id)
+    dish = get_object_or_404(dishes, id=dish_id)
+    dish.delete()
+    return HttpResponse("")
