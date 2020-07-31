@@ -33,7 +33,7 @@ function loadData(menu){
     $("p#order-status-value").text(menu.orderStatus);
 
     updateCountDown(menu);
-    window.setInterval(updateCountDown(menu), 1000);
+    window.setInterval(updateCountDown(menu), 1000); 
 }
 
 function updateCountDown(menu){

@@ -16,7 +16,7 @@
 	<div class="limiter">
 		<div class="container-form">
 			<div class="wrap-form">
-				<form class="login" method="POST" action="{% url 'login_user' %}">
+				<form class="login" id = "login-form" method="POST" action= "login_user">
 					{% csrf_token %}
 					<p class="form-title">
 						User login
@@ -44,7 +44,7 @@
 		
 		<div class="container-form">
 			<div class="wrap-form">
-				<form class="register" method="POST" action="{% url 'sign_up' %}">
+				<form class="register" id = "register-form" method="POST" action="sign_up">
 					{% csrf_token %}
 					<p class="form-title">
 						Start a Restaurant
@@ -59,7 +59,7 @@
 					</div>
 					
 					<div class="wrap-input">
-						<input id = "reg-pw-cfm" class="input" type="password" name="pass" placeholder="Confirm Password">
+						<input id = "reg-pw-cfm" class="input" type="password" name="pass_cfm" placeholder="Confirm Password">
 					</div>
 
 					<div class="container-form-btn">

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .utils.validation import validate_registration, validate_dish_input
 from .utils.model_helper import create_user ,create_dish, create_menu
@@ -19,12 +19,16 @@ def index(request):
 def sign_up(request):
     username = request.POST['username']
     password = request.POST['pass']
-    if validate_registration(username, password):
-        user = create_user(username,password,1)
-        login(request, user)
-        return redirect('manager')
+    if (username != ""):
+        if validate_registration(username, password):
+            print('sign_up happened')
+            user = create_user(username,password,1)
+            login(request, user)
+            return redirect('manager')
+        else:
+            return render(request, 'login.html')
     else:
-        return redirect('')
+        return render(request, 'login.html')
 
 @require_http_methods(['POST'])
 def login_user(request):
@@ -32,7 +36,6 @@ def login_user(request):
     password = request.POST['pass']
     user = authenticate(username = username, password = password)
     if (user is not None):
-        login(request, user)
         if (user.role.id == 1):
             return redirect('manager')
         if (user.role.id != 1):
@@ -40,13 +43,17 @@ def login_user(request):
     else:
         return redirect('')     
 
+@require_http_methods(['GET'])
+def logout_user(request):
+    logout(request)
+    return render(request, 'login.html')
+    
 @login_required
 def manager(request):
     if(request.user.role.id == 1):
         return render(request, 'manager.html')
     else:
         return redirect('')
-
 
 @login_required
 def manager_personal(request):
@@ -198,22 +205,6 @@ def menus(request):
             id += 1
     return JsonResponse(data)
 
-
-#@require_http_methods(['GET'])
-#def serve_dishes(request):
-#    restaurant_id=request.user.restaurant.id
-#    if(request.GET.get('menuID',None) is not None):
-#        dishes = Dish.objects.filter(restaurant_id=restaurant_id)
-#        dish = get_object_or_404(dishes, id=request.GET['dishID'])
-#        data =  {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url, "serve": dish.serve}
-#    else:
-#        dishes = Dish.objects.filter(restaurant_id=restaurant_id, serve = 1)
-#        id = 0
-#        data = {}
-#        for dish in dishes:
-#            data[id] = {"id": dish.id, "name": dish.name}
-#            id += 1
-#    return JsonResponse(data)
 
 @require_http_methods(['POST'])
 def employee_update(request):

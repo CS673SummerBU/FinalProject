@@ -83,15 +83,19 @@ function validateInfo(){
         alert("Please enter employee username!!");
         return false;
     }
-    
-    if($("input#password").val() == ""){
-        alert("Please enter employee password!!");
-        return false;
-    }
-    if($("input#password").val() != $("input#password-cfm").val()) {
-        alert("Passwords don't match!!");
-        return false;
+
+    if($("input#password").val().match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/)) {
+        if($("input#password").val() == ""){
+            alert("Please enter employee password!!");
+            return false;
+        }
+        if($("input#password").val() != $("input#password-cfm").val()) {
+            alert("Passwords don't match!!");
+            return false;
+        } else {
+            return true;
+        }
     } else {
-        return true;
+        alert("Please make sure password is between 6 to 20 characters and includes 1 numeric digit and a special character (!@#$%^&*)")
     }
 }
