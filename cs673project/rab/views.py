@@ -42,6 +42,8 @@ def login_user(request):
     username = request.POST['username']
     password = request.POST['pass']
     user = authenticate(username = username, password = password)
+    print(username)
+    print(password)
     if (user is not None):
         login(request, user)
         if (user.role.id == 1):
