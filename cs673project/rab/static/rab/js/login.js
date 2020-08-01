@@ -1,5 +1,4 @@
 $(document).ready(function() {
-                  
      /*          
     $("#login-btn").on("click", function(){
         let username = $("#login-username").val();
@@ -17,38 +16,74 @@ $(document).ready(function() {
         //window.open("../html/manager.html");
     });
     */
-    $("#register-btn").on("click", function(){
+
+    $("#register-btn").on("click", function(e){
+        console.log('Reg Starts!');
+        e.preventDefault();
+        let data = $('#reg-form').serialize();
+        let url = $('#reg-form').attr("action");
+        console.log($("#reg-username").val());
 
         if(validatePassword()){
-            let username = $("#reg-username").val();
-            let pw = $("#reg-pw").val();
-            let pwc = $("#reg-pw-cfm").val();
-            console.log("user register:");
-            console.log("    username: " + username);
-            console.log("    password: " + pw);
-            console.log("    password: " + pwc);
-            
-            //todo: ajax to register
-            
-            //on success:
-            sessionStorage.setItem("restaurantID", 1);
-            sessionStorage.setItem("userID", 1);
-           // window.open("../html/manager.html");
-           
-        }else{
-            alert("Passwords don't match!")
-        }
-      
-    });
+            console.log('Password Validated!');
+            validateUsername()
+            .then(function(data_take) {
+                if (data_take.is_taken) {
+                    alert("A user with this username already exists!");
+                    return;
+                }
+                console.log('Username Validated!');
+                console.log(data_take);
+                console.log(url);
+                //let data = $('#reg-form').serialize();
+                //let url = $('#reg-form').attr("action");
 
+                $.post(url, data, (result) => {
+                    $("#reg-username").val();
+                    $("#reg-pw").val();
+                    $("#reg-pw-cfm").val();
+                    sessionStorage.setItem("restaurantID", 1);
+                    sessionStorage.setItem("userID", 1);
+                    //window.location.href = '/manager/';
+                },'json'
+                );
+            })
+        }
+        $("#reg-username").val("");
+        $("#reg-pw").val("");
+        $("#reg-pw-cfm").val("");
+    });
 });
 
 function validatePassword(){
-    if($("#reg-pw").val() != $("#reg-pw-cfm").val()) {
-        return false;
+    if($("#reg-pw").val().match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/)) {
+        if($("#reg-pw").val() == ""){
+            alert("Please enter password!!");
+            return false;
+        }
+        if($("#reg-pw").val() != $("#reg-pw-cfm").val()) {
+            alert("Passwords don't match!!");
+            return false;
+        } else {
+            return true;
+        }
     } else {
-        return true;
+        alert("Please make sure password is between 6 to 20 characters and includes 1 numeric digit and a special character (!@#$%^&*)")
     }
 }
 
-
+function validateUsername() {
+    return new Promise((resolve) => {
+        $.ajax({
+            url: 'validate_username',
+            type: 'GET',
+            data: {
+                'username':  $("#reg-username").val(),
+            },
+            dataType: 'json',
+            success: function(data) {
+                resolve(data);
+            }
+        });
+    })
+}

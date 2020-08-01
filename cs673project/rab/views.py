@@ -17,14 +17,25 @@ def index(request):
 
 @require_http_methods(['POST'])
 def sign_up(request):
+    print('Sign Up Happening')
     username = request.POST['username']
     password = request.POST['pass']
     if validate_registration(username, password):
         user = create_user(username,password,1)
         login(request, user)
+        print(request)
+        #return HttpResponse(json.dumps(request), mimetype='text/json')
         return redirect('manager')
     else:
-        return redirect('')
+        return render(request, 'login.html')
+
+@require_http_methods(['GET'])
+def validate_username(request):
+    username = request.GET.get('username', None)
+    data = {
+        'is_taken': User.objects.filter(username = username).exists()
+    }
+    return JsonResponse(data)
 
 @require_http_methods(['POST'])
 def login_user(request):
@@ -38,7 +49,7 @@ def login_user(request):
         if (user.role.id != 1):
             return HttpResponse('placeholder!')
     else:
-        return redirect('')     
+        return render(request, 'login.html')     
 
 @require_http_methods(['GET'])
 def logout_user(request):
