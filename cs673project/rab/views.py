@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -51,12 +51,12 @@ def login_user(request):
         if (user.role.id != 1):
             return HttpResponse('placeholder!')
     else:
-        return render(request, 'login.html')     
+        return render(request, 'login_user')     
 
 @require_http_methods(['GET'])
 def logout_user(request):
     logout(request)
-    return render(request, 'login.html')
+    return HttpResponseRedirect('/rab/')
 
 @login_required
 def manager(request):

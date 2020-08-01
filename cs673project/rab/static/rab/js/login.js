@@ -96,9 +96,8 @@ $(document).ready(function() {
                     );
                 }
             });
-            alert('A user has been created! Please login!');
+            alert('A user has been created!');
             location.reload();
-            return;
         }
         $("#reg-username").val("");
         $("#reg-pw").val("");
