@@ -25,7 +25,7 @@ def create_dish(name, cook_time, fresh_time, image, res_id, serve):
     dish.save()
     return dish
 
-def create_menu(restaurant_id, dish_id):
-    menu = Menu(restaurant_id = restaurant_id, dish_id = dish_id)
+def create_menu(restaurant_id, dish_id, user_id):
+    menu = Menu(restaurant_id = restaurant_id, dish_id = dish_id, user_id = user_id)
     menu.save()
     return menu

@@ -35,4 +35,5 @@ class Menu(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE,default = None)
     last_served = models.DateTimeField(null=True)
     status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
-    last_updated = models.DateTimeField(null=True)
+    last_updated = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)

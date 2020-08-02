@@ -296,9 +296,8 @@ def dish_update(request):
             dish.cook_time = cook_time
             dish.fresh_time = fresh_time
             dish.save()
-    if (serve):
-        menu = create_menu(restaurant_id = restaurant_id, dish_id = dish.id)
-        menu.save()
+    if (int(serve) == 1):
+        menu = create_menu(restaurant_id = restaurant_id, dish_id = dish.id, user_id = request.user.id)
     else:
         menu = Menu.objects.filter(restaurant_id = restaurant_id, dish_id = dish.id)
         menu.delete()
