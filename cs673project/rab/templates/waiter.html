@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE HTML>
+<head>
+    <title>Waiter</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/waiter.css' %}">
+	
+	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+	 <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script type="text/javascript" src="{% static 'rab/js/waiter.js' %}"></script>
+    <script type="text/javascript" src="{% static 'rab/js/util.js' %}"></script>
+</head>
+<body>
+    <div id = "title-bar">
+        <p>Restaurant Name</p>
+    </div>
+
+    <ul id="dish-list" class="collapsible">
+    </ul>
+
+</body>
+	

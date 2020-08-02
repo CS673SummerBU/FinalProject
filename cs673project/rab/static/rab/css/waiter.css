@@ -1,0 +1,31 @@
+.dish-info-table{
+    display: inline-block; 
+    width: 100%; 
+    min-width: 300px;
+}
+
+.left-panel{
+    width: 30%;
+    height: 100%;
+    float: left;
+}
+
+.right-panel{
+    width: 70%;
+    height: 100%;
+    float: right; 
+    background: aliceblue;
+}
+
+.dish-header{
+    background: beige;
+}
+
+.order-button{
+    height: 50px;
+    width: 100px;
+    margin: 20px auto;
+    display: block;
+    font-size: 24px;
+    background: yellow;
+}
