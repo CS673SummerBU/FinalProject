@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -13,7 +13,15 @@ def index(request):
     if request.user.is_anonymous:
         return render(request, 'login.html')
     else:
-        return render(request, 'manager.html')
+        return redirect_user(request.user.role.id)
+
+def redirect_user(role_id):
+    if (role_id == 1):
+        return redirect('manager')
+    elif (role_id == 2):
+        return redirect('waiter')
+    elif (role_id == 3):
+        return redirect('kitchen')
 
 @require_http_methods(['POST'])
 def sign_up(request):
@@ -33,10 +41,7 @@ def login_user(request):
     user = authenticate(username = username, password = password)
     if (user is not None):
         login(request, user)
-        if (user.role.id == 1):
-            return redirect('manager')
-        if (user.role.id != 1):
-            return HttpResponse('placeholder!')
+        return redirect_user(user.role.id)
     else:
         return redirect('')     
 
@@ -52,6 +57,19 @@ def manager(request):
     else:
         return redirect('')
 
+@login_required
+def waiter(request):
+    if(request.user.role.id == 2):
+        return render(request, 'waiter.html')
+    else:
+        return redirect('')
+
+@login_required
+def kitchen(request):
+    if(request.user.role.id == 3):
+        return render(request, 'kitchen.html')
+    else:
+        return redirect('')
 
 @login_required
 def manager_personal(request):

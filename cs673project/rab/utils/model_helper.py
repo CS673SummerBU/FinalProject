@@ -1,6 +1,6 @@
 from ..models import User, Restaurant, Dish, Menu
 from django.db import transaction
-
+import traceback
 
 def create_user(username, password, role, res_id=None):
     try:
@@ -11,8 +11,8 @@ def create_user(username, password, role, res_id=None):
             user.set_password(password)
             user.save()
         return user
-    except: 
-        print('error')
+    except Exception as ex:
+        traceback.print_exception(type(ex), ex, ex.__traceback__)
 
 def create_restaurant():
     restaurant = Restaurant.objects.create()
