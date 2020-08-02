@@ -325,3 +325,19 @@ def dish_delete(request):
     dish = get_object_or_404(dishes, id=dish_id)
     dish.delete()
     return HttpResponse("")
+
+@login_required
+@require_http_methods(['GET'])
+def restaurant_status(request):
+    if(request.user.role.id == 1):
+        restaurant_id = request.user.restaurant.id
+        status = request.GET.get('status',None)
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+        if (status == 'true'):
+            restaurant.open_status = True
+            restaurant.save()
+        elif (status == 'false'):
+            restaurant.open_status = False
+            restaurant.save()
+    data = {'status': restaurant.open_status}         
+    return JsonResponse(data)
