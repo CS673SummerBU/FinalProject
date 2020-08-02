@@ -2,4 +2,13 @@ insert into rab.rab_role(name)
 values
 ('manager'),
 ('waiter'),
-('cook')
+('kitchen'),
+('rab_admin')
+
+insert into rab.rab_status(name)
+values
+('no order placed'),
+('order placed'),
+('ready to serve'),
+('serving')
+

@@ -9,6 +9,7 @@ class Restaurant(models.Model):
     address = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
     email = models.CharField(max_length=30)
+    open_status = models.BooleanField(default=False)
 
 class Role(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -26,14 +27,13 @@ class Dish(models.Model):
     #description = models.CharField(max_length=100)
     serve = models.IntegerField(default=0)
 
+class Status(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
 class Menu(models.Model):
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE, default=None)
-    last_served = models.DateTimeField(null=True)
-    order_state = models.CharField(max_length=50, unique = True, default = "NO ORDER PLACED")
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE,default = None)
-
-class Orders(models.Model):
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    status = models.IntegerField(default=0)
-    last_updated = models.DateTimeField()
+    last_served = models.DateTimeField(null=True)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
+    last_updated = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
