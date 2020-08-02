@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE HTML>
+<head>
+    <title>Kitchen</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/kitchen.css' %}">
+	
+	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript" src="{% static 'rab/js/kitchen.js' %}"></script>
+    <script type="text/javascript" src="{% static 'rab/js/util.js' %}"></script>
+</head>
+<body>
+    <div id = "title-bar">
+        <p>RAB - Kitchen</p>
+    </div>
+    <div class="limiter">
+        <div class="container-order">
+            <div id = "order-42" class="wrap-order">
+                <p class="order-title">
+                        Beef Broccli
+                </p>
+                <p class="order-due">
+                        15:46
+                </p>
+                <button class="ready-button">READY</button>
+            </div>
+        </div>
+    </div>
+</body>
