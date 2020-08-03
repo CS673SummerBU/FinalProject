@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 from .utils.validation import validate_registration, validate_dish_input
 from .utils.model_helper import create_user ,create_dish, create_menu
 from .models import User, Restaurant, Role, Dish, Menu
@@ -339,5 +340,36 @@ def restaurant_status(request):
         elif (status == 'false'):
             restaurant.open_status = False
             restaurant.save()
+            menu_items = Menu.objects.filter(restaurant_id = restaurant_id)
+            if(menu_items is not None):
+                menu_items.update(last_served=None, user_id = request.user.id)
     data = {'status': restaurant.open_status}         
     return JsonResponse(data)
+
+@login_required
+@require_http_methods(['GET'])
+def menu_status(request):
+    data = {}
+    menu_items = Menu.objects.filter(restaurant_id = request.user.restaurant.id)
+    if(request.user.role.id == 2):
+        for menu_item in menu_items:
+            data[menu_item.id] = {"id": menu_item.id, "name": menu_item.dish.name, "cookTime": menu_item.dish.cook_time, "freshTime": menu_item.dish.cook_time, 
+            'orderStatus': menu_item.status.id, "lastServed": int((menu_item.last_served.timestamp() * 1000)) if menu_item.last_served else 'none',
+            'foodImageUrl': menu_item.dish.image.url}
+    return JsonResponse(data)
+
+@login_required
+@require_http_methods(['GET'])
+def set_status(request):
+    menus = Menu.objects.filter(restaurant_id = request.user.restaurant.id)
+    menu_item = get_object_or_404(menus, id=request.GET.get('menuitem',None))
+    status = int(request.GET['status'])
+    if(request.user.role.id == 2):
+        if(menu_item.status.id == status and status == 3):
+            menu_item.status_id = 4
+            menu_item.last_served = timezone.now()
+        elif(menu_item.status.id == status and (status == 1 or status == 4)):
+            menu_item.status_id = 2
+    menu_item.user_id = request.user.id
+    menu_item.save()
+    return HttpResponse()

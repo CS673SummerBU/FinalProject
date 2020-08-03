@@ -30,5 +30,6 @@ urlpatterns = [
     path('waiter', views.waiter, name='waiter'),
     path('kitchen', views.kitchen, name='kitchen'),
     path('restaurant_status', views.restaurant_status, name='restaurant_status'),
+    path('menu_status', views.menu_status, name='menu_status'),
+    path('set_status', views.set_status, name='set_status'),
 ]
-

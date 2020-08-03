@@ -36,7 +36,6 @@ class Command(BaseCommand):
         old_status = menu_item.status.id
         menu_item.status_id=new_status
         menu_item.user_id = self.rab_user_id
-        menu_item.last_updated = timezone.now()
         try:
             if (Menu.objects.get(id=menu_item.id).status.id == old_status): #checking whether menu object changed outside of process
                 menu_item.save()
