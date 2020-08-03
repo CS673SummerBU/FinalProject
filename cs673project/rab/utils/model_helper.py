@@ -5,8 +5,8 @@ import traceback
 def create_user(username, password, role, res_id=None):
     try:
         with transaction.atomic():
-            if(role == 1):
-                res_id = create_restaurant()  #might need to prevent creating a new restaurant/menu if you create a new manager from the manager_employee page
+            if(role == 1 and res_id == None): #if another manager created. Stop from creating new restaurant
+                res_id = create_restaurant() 
             user = User(username=username, is_superuser=False, is_active=True, is_staff=False, role_id=role, restaurant_id = res_id )
             user.set_password(password)
             user.save()

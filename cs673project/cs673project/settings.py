@@ -86,17 +86,6 @@ DATABASES = {
     }
 }
 
-#mysql
-DATABASES_T = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'restaurant_automation_buffet', #needs changing based on your NAME for database
-        'USER' : 'root',
-        'PASSWORD' : 'CS6732020',
-        'HOST' : '127.0.0.1'
-    }
-}
-
 ##sqllite
 #DATABASES = {
 #    'default': {

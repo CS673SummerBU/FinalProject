@@ -12,30 +12,26 @@ var getOrders = () => {
 };
 
 function loadData(){
-    let orderRoot = $("#order-list");
+    let orderRoot = $(".limiter");
     orderRoot.empty();
     
     Object.keys(orders).forEach(key => {
-      console.log(orders[key].dueTime);        
       orders[key].dueTimeLeft = orders[key].dueTime - new Date().getTime();
       orderRoot.append('<div class="container-order"><div id = "order-' + orders[key].id + '" class="wrap-order"><span class="order-id" style="display: none">' + orders[key].id + '</span><p class="order-title">' + orders[key].name + '</p><p class="order-due">' + millisToTimeString(orders[key].dueTimeLeft) + '</p><button class="ready-button">READY</button></div></div>');
 
       if(orders[key].dueTimeLeft < 0){
         $("#order-" + orders[key].id).addClass("past-due");
       }
-      if (orders[key].orderStatus == 2){
-        $("#order-" + key + ".ready-button").click(() =>{
-          //ajax to set the order status to ready for pickup
-          console.log('CLICK HAPPENS')
-          setStatus(orders[key].id, orders[key].orderStatus)
-          console.log("order " + $(this).siblings(".order-id").text() + " ready!");
-        });
-      }
+      $("#order-" + orders[key].id + " > .ready-button").click(() =>{
+        //ajax to set the order status to ready for pickup
+        setStatus(orders[key].id, orders[key].orderStatus)
+        console.log("order " + $(this).siblings(".order-id").text() + " ready!");
+      });
+
     });
 }
 
 function setStatus(menuID,statusID) {
-    //console.log('setStatus Happens');
     $.get('set_status',{menuitem:menuID, status:statusID}, (result) =>{});
 }
 
