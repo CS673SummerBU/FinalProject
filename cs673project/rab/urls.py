@@ -32,4 +32,6 @@ urlpatterns = [
     path('restaurant_status', views.restaurant_status, name='restaurant_status'),
     path('menu_status', views.menu_status, name='menu_status'),
     path('set_status', views.set_status, name='set_status'),
+    path('restaurants/<str:restaurant_name>/', views.customer, name='customer'),
+    path('restaurants/<str:restaurant_name>/menu', views.customer_menu, name='customer_menu'),
 ]

@@ -44,21 +44,23 @@ function loadData(){
             $("#dish-" + key + " > .dish-header span").text(ORDER_STATE[dishes[key].orderStatus])
             $("#dish-" + key + " > .dish-header span").css('color', 'green')
             $("#dish-" + key + " > .dish-header span").css('margin-left', '40px')
-            $("#dish-" + key + " > .collapsible-body > .order-button").click(()=>{
-               //ajax to update the order status 
-               setStatus(dishes[key].id, dishes[key].orderStatus)
-            });
-        }else{
+        }
+        /*
+        else{
             $("#dish-" + key + " > .collapsible-body > .order-button").click(()=>{
                //ajax to place the order with dish id and user id and other info 
                setStatus(dishes[key].id, dishes[key].orderStatus)
             });
-        }
-        
+        }*/
+        $("#dish-" + key + " > .collapsible-body > .order-button").click(()=>{
+            //ajax to update the order status 
+            setStatus(dishes[key].id, dishes[key].orderStatus)
+         });
         if(sessionStorage.getItem("dishID") == dishes[key].id){
             $("#" + 'dish-' + key).addClass("active");
         }
     }); 
+
 }
 
 function setStatus(menuID,statusID) {

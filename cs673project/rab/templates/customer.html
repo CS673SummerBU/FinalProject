@@ -18,7 +18,8 @@
 </head>
 <body>
     <div id = "title-bar">
-        <p>Restaurant Name</p>
+        <p>{{ restaurant.name }}</p>
+        <input id="rest_id" type="hidden" value="{{ restaurant.id }}"> 
     </div>
 
     <ul id="dish-list" class="collapsible">
