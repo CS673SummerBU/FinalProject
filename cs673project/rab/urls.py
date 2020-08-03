@@ -32,4 +32,5 @@ urlpatterns = [
     path('restaurant_status', views.restaurant_status, name='restaurant_status'),
     path('menu_status', views.menu_status, name='menu_status'),
     path('set_status', views.set_status, name='set_status'),
+    path('orders',views.orders,name='orders'),
 ]

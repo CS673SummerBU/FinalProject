@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
-from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -7,6 +7,7 @@ from django.utils import timezone
 from .utils.validation import validate_registration, validate_dish_input
 from .utils.model_helper import create_user ,create_dish, create_menu
 from .models import User, Restaurant, Role, Dish, Menu
+from datetime import datetime, timedelta
 import json
 # Create your views here.
 
@@ -49,7 +50,7 @@ def login_user(request):
 @require_http_methods(['GET'])
 def logout_user(request):
     logout(request)
-    return render(request, 'login.html')
+    return HttpResponseRedirect('/rab/')
 
 @login_required
 def manager(request):
@@ -210,9 +211,9 @@ def menus(request):
         dishes = Dish.objects.filter(restaurant_id =restaurant_id)
         dish = get_object_or_404(dishes, id=menu.dish_id)
         if (dish.image):
-            data =  {"id": menu.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url, "orderStatus" : menu.order_state}
+            data =  {"id": menu.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url, "orderStatus" : menu.status.name}
         else:
-            data =  {"id": menu.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "orderStatus" : menu.order_state}   
+            data =  {"id": menu.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "orderStatus" : menu.status.name}   
     else:
         menus = Menu.objects.filter(restaurant_id=restaurant_id)
         id = 0
@@ -222,22 +223,17 @@ def menus(request):
             id += 1
     return JsonResponse(data)
 
-
-#@require_http_methods(['GET'])
-#def serve_dishes(request):
-#    restaurant_id=request.user.restaurant.id
-#    if(request.GET.get('menuID',None) is not None):
-#        dishes = Dish.objects.filter(restaurant_id=restaurant_id)
-#        dish = get_object_or_404(dishes, id=request.GET['dishID'])
-#        data =  {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url, "serve": dish.serve}
-#    else:
-#        dishes = Dish.objects.filter(restaurant_id=restaurant_id, serve = 1)
-#        id = 0
-#        data = {}
-#        for dish in dishes:
-#            data[id] = {"id": dish.id, "name": dish.name}
-#            id += 1
-#    return JsonResponse(data)
+@require_http_methods(['GET'])
+def orders(request):
+    restaurant_id=request.user.restaurant.id
+    orders = Menu.objects.filter(restaurant_id = restaurant_id, status_id = 2)
+    id = 0
+    data = {}
+    for order in orders:
+        due = order.last_updated + timedelta(minutes = order.dish.cook_time)
+        data[id] = {"id": order.id, "name":order.dish.name, "dueTime": int(due.timestamp()*1000), 'orderStatus': order.status.id}
+        id+=1
+    return JsonResponse(data)
 
 @require_http_methods(['POST'])
 def employee_update(request):
@@ -353,23 +349,34 @@ def menu_status(request):
     menu_items = Menu.objects.filter(restaurant_id = request.user.restaurant.id)
     if(request.user.role.id == 2):
         for menu_item in menu_items:
-            data[menu_item.id] = {"id": menu_item.id, "name": menu_item.dish.name, "cookTime": menu_item.dish.cook_time, "freshTime": menu_item.dish.cook_time, 
-            'orderStatus': menu_item.status.id, "lastServed": int((menu_item.last_served.timestamp() * 1000)) if menu_item.last_served else 'none',
-            'foodImageUrl': menu_item.dish.image.url}
+            if (menu_item.dish.image):
+                data[menu_item.id] = {"id": menu_item.id, "name": menu_item.dish.name, "cookTime": menu_item.dish.cook_time, "freshTime": menu_item.dish.cook_time, 
+                'orderStatus': menu_item.status.id, "lastServed": int((menu_item.last_served.timestamp() * 1000)) if menu_item.last_served else 'none',
+                'foodImageUrl': menu_item.dish.image}
+            else:
+                data[menu_item.id] = {"id": menu_item.id, "name": menu_item.dish.name, "cookTime": menu_item.dish.cook_time, "freshTime": menu_item.dish.cook_time, 
+                'orderStatus': menu_item.status.id, "lastServed": int((menu_item.last_served.timestamp() * 1000)) if menu_item.last_served else 'none'}
     return JsonResponse(data)
 
 @login_required
 @require_http_methods(['GET'])
 def set_status(request):
+    print('In set_status')
     menus = Menu.objects.filter(restaurant_id = request.user.restaurant.id)
     menu_item = get_object_or_404(menus, id=request.GET.get('menuitem',None))
     status = int(request.GET['status'])
-    if(request.user.role.id == 2):
+    print(menu_item.status.id)
+    print(status)
+    print(request.user.role.id)
+    if(request.user.role.id == 2): #waiter
         if(menu_item.status.id == status and status == 3):
             menu_item.status_id = 4
             menu_item.last_served = timezone.now()
         elif(menu_item.status.id == status and (status == 1 or status == 4)):
             menu_item.status_id = 2
+    elif(request.user.role.id == 3): #kitchen
+        if(status == 2):
+            menu_item.status_id = 3
     menu_item.user_id = request.user.id
     menu_item.save()
     return HttpResponse()

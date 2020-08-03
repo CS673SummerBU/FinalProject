@@ -13,19 +13,9 @@
 </head>
 <body>
     <div id = "title-bar">
-        <p>RAB - Kitchen</p>
+        <p style="text-align: left;">RAB - Kitchen<span style="float:right;"><a href="{% url 'logout_user' %}">Logout</a></span></p>
     </div>
-    <div class="limiter">
-        <div class="container-order">
-            <div id = "order-42" class="wrap-order">
-                <p class="order-title">
-                        Beef Broccli
-                </p>
-                <p class="order-due">
-                        15:46
-                </p>
-                <button class="ready-button">READY</button>
-            </div>
-        </div>
+    <div id = "order-list" class="limiter">
+
     </div>
 </body>
