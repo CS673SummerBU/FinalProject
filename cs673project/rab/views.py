@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
-from django.http import HttpResponse, JsonResponse, HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden, HttpResponseRedirect, Http404
+
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -343,7 +344,7 @@ def menu_status(request):
     menu_items = Menu.objects.filter(restaurant_id = request.user.restaurant.id)
     if(request.user.role.id == 2):
         for menu_item in menu_items:
-            data[menu_item.id] = {"id": menu_item.id, "name": menu_item.dish.name, "cookTime": menu_item.dish.cook_time, "freshTime": menu_item.dish.cook_time, 
+            data[menu_item.id] = {"id": menu_item.id, "name": menu_item.dish.name, "cookTime": menu_item.dish.cook_time, "freshTime": menu_item.dish.fresh_time, 
             'orderStatus': menu_item.status.id, "lastServed": int((menu_item.last_served.timestamp() * 1000)) if menu_item.last_served else 'none',
             'foodImageUrl': menu_item.dish.image.url if (menu_item.dish.image) else 'none'}
     return JsonResponse(data)
@@ -366,3 +367,21 @@ def set_status(request):
     menu_item.user_id = request.user.id
     menu_item.save()
     return HttpResponse()
+
+def customer(request,restaurant_name):
+    name = restaurant_name.replace("_"," ") 
+    restaurant = get_object_or_404(Restaurant, name = name)
+    return render(request, 'customer.html', {"restaurant" : restaurant })
+
+
+def customer_menu(request,restaurant_name):
+    menu_items = Menu.objects.filter(restaurant_id = request.GET['id'])
+    if(menu_items is None):
+        raise Http404("Restaurant Not Found")
+    data = {}
+    for menu_item in menu_items:
+        data[menu_item.id] = {"id": menu_item.id, "name": menu_item.dish.name, "freshTime": menu_item.dish.fresh_time, 
+        "lastServed": int((menu_item.last_served.timestamp() * 1000)) if menu_item.last_served else 'none',
+        'foodImageUrl': menu_item.dish.image.url}
+    return JsonResponse(data)
+    
