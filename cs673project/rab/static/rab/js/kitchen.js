@@ -17,11 +17,10 @@ function loadData(){
     
     Object.keys(orders).forEach(key => {
       console.log(orders[key].dueTime);        
-      let dueTimeLeft = orders[key].dueTime - new Date().getTime();
-      console.log(dueTimeLeft);
-      orderRoot.append('<div class="container-order"><div id = "order-' + orders[key].id + '" class="wrap-order"><span class="order-id" style="display: none">' + orders[key].id + '</span><p class="order-title">' + orders[key].name + '</p><p class="order-due">' + millisToTimeString(dueTimeLeft) + '</p><button class="ready-button">READY</button></div></div>');
+      orders[key].dueTimeLeft = orders[key].dueTime - new Date().getTime();
+      orderRoot.append('<div class="container-order"><div id = "order-' + orders[key].id + '" class="wrap-order"><span class="order-id" style="display: none">' + orders[key].id + '</span><p class="order-title">' + orders[key].name + '</p><p class="order-due">' + millisToTimeString(orders[key].dueTimeLeft) + '</p><button class="ready-button">READY</button></div></div>');
 
-      if(dueTimeLeft < 0){
+      if(orders[key].dueTimeLeft < 0){
         $("#order-" + orders[key].id).addClass("past-due");
       }
       if (orders[key].orderStatus == 2){
