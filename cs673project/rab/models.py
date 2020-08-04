@@ -24,7 +24,6 @@ class Dish(models.Model):
     fresh_time = models.IntegerField(default=0)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='resources',blank=True,null=True)
-    #description = models.CharField(max_length=100)
     serve = models.IntegerField(default=0)
 
 class Status(models.Model):
