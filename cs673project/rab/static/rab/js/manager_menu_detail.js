@@ -10,23 +10,51 @@ $(document).ready(function() {
     }else{
         $("#delete-btn").css("display", "none");
     }
-    /*
-    $("#serve-dish").on("change", function(){
+
+    $("#serve-dish").on("change", function(e){
+        var tk = $(this).attr("data-token")
+        console.log('serve-dish happened');
         let checked = $("#serve-dish").prop("checked");
-        if(checked){
-            if(dishID){
-                //todo: ajax to add the dish to menu
-                console.log("add");
-            }else{
-                alert("Save the dish before serving!!");
-                $(this).prop("checked", false);
-            }
-            
-        }else{
-            //todo: ajax to remove the dish from menu
+        console.log(checked);
+        let data = $('#serve-dish').serialize();
+        let url = $('#serve-dish').attr("action");
+        if(dishID) {
+            console.log('DishID true');
+            $("<input />").attr("type", "hidden")
+                .attr("name", "dishID")
+                .attr("value", dishID)
+                .appendTo("#serve-dish");
+            console.log('Input happened');
+            console.log(url);
+            //console.log(data);
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                url: url,
+                data: {'dishID':dishID,'serve-dish':checked,'csrfmiddlewaretoken': tk},        
+                success: function (response){
+                    sessionStorage.setItem("restaurantID", 1);
+                    sessionStorage.setItem("userID", 1);
+                    $(this).prop("checked", response.serve);
+                },
+            });
+
+            /*
+            $.post(url, formData, (result) => {
+                console.log($("#serve-dish").val());
+                $("#serve-dish").val();
+                sessionStorage.setItem("restaurantID", 1);
+                sessionStorage.setItem("userID", 1);
+                $(this).prop("checked", result.serve);
+            },'json'
+            );
+            */
+        } else {
+            alert("Save the dish before serving!!");
+            $(this).prop("checked", false);
         }
     });
-    */
+    
     $("#save-btn").on("click", function(e){
         if(validateDish()) {
             if(dishID){
@@ -46,8 +74,6 @@ $(document).ready(function() {
                 contentType: false,
                 type: "POST",
                 success: function (data) {
-                    console.log('after success:')
-                    console.log(dishID)
                     loadData(data);
                     parent.getDishes();
                 }
@@ -79,7 +105,6 @@ $(document).ready(function() {
             dishID = undefined;
             location.reload();
             parent.getDishes();
-            console.log("delete dish");
         });
     });
 
@@ -107,25 +132,24 @@ var getDish = (dishID) => {
 }
 
 function loadData(dish){
-    console.log('after loadData call:')
-    console.log(dishID)
     if (dishID == undefined) {
         $("#delete-btn").css("display", "");
         sessionStorage.setItem("dishID", dish.id);
         dishID = dish.id;
     }
-    console.log('after loadData + dishID == undefined call:')
-    console.log(dishID)
 
     dishID = dish.id
     $("input#display-name").val(dish.name); //first part is <id
     $("input#cook-time").val(dish.cookTime);
     $("input#fresh-time").val(dish.freshTime);
-    $("select#serve").val(dish.serve);
     
     if(dish.foodImageUrl != null){
         $("img#current-food-image").prop("src", dish.foodImageUrl);
         $("img#current-food-image").show();
+    }
+
+    if(dish.serve == true){
+        $("#serve-dish").prop("checked", true);
     }
 
 }

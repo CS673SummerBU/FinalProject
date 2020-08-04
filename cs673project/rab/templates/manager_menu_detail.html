@@ -36,6 +36,7 @@
                         <img id = "current-food-image" src="{% static 'rab/resources/shrimp-cocktail.jpg' %}" alt="" width="100px" height="100px">
                     </div>
                     
+                    <!--
                     <div class="wrap-input">
                         <p>Serving</p>
                         <select name = "serve" id="serve" class="input">
@@ -43,6 +44,7 @@
                             <option value="1">Yes</option>
                         </select>
                     </div>
+                    -->
 
                     <div class="container-form-btn">
                         <button id="save-btn" class="form-btn" type="button">
@@ -53,15 +55,14 @@
                         </button>
                     </div>
                     
-                    <!--
+                    
                     <div style="margin: 40px auto;">
                         <p style="font-size: 20px;">Serve This Dish</p>
                         <label class="switch">
-                            <input id = "serve-dish" type="checkbox">
+                            <input id = "serve-dish" type="checkbox" method = "POST" action="dish_serve" data-token = "{{ csrf_token }}">
                             <span class="slider round"></span>
                         </label>
-                    </div>
-                    -->
+                    </div>   
             </form>
     </div>
 </body>

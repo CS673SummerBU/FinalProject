@@ -189,10 +189,7 @@ def dishes(request):
     if(request.GET.get('dishID',None) is not None):
         dishes = Dish.objects.filter(restaurant_id=restaurant_id)
         dish = get_object_or_404(dishes, id=request.GET['dishID'])
-        if (dish.image): 
-            data =  {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url, "serve":dish.serve}
-        else:
-            data =  {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "serve":dish.serve}
+        data = {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url if dish.image else 'none', "serve":dish.serve}
     else:
         dishes = Dish.objects.filter(restaurant_id=restaurant_id)
         id = 0
@@ -271,34 +268,49 @@ def dish_update(request):
     cook_time = request.POST['cook-time']
     fresh_time = request.POST['fresh-time']
     image = request.FILES.get('food-image',None)
-    serve = request.POST['serve']
+    #serve = request.POST['serve']
     dish = None
     if(dish_id is not None):
-        dishes = Dish.objects.filter(restaurant_id=restaurant) #restaurant_id?
+        dishes = Dish.objects.filter(restaurant_id=restaurant) 
         dish = get_object_or_404(dishes, id=dish_id)
         dish.name = name
         dish.cook_time = cook_time
         dish.fresh_time = fresh_time
         dish.image = image
-        dish.serve = serve
+        #dish.serve = serve
         dish.save()
     else: #brand new dish
         if validate_dish_input(name, cook_time, fresh_time):
-            dish = create_dish(name, cook_time, fresh_time, image, restaurant_id, serve) #restaurant_id?
+            dish = create_dish(name, cook_time, fresh_time, image, restaurant_id)
             dish.name = name
             dish.cook_time = cook_time
             dish.fresh_time = fresh_time
             dish.save()
-    if (int(serve) == 1):
+    data = {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url if (image) else 'none'}
+    return JsonResponse(data)
+
+@require_http_methods(['POST'])
+def dish_serve(request):
+    restaurant_id=request.user.restaurant.id
+    restaurant = request.user.restaurant
+    dish_id = request.POST.get('dishID',None)
+    serve = request.POST.get('serve-dish')
+    data = {}
+    dishes = Dish.objects.filter(id = dish_id)
+    dish = get_object_or_404(dishes, id=dish_id)
+    if (serve == 'true'):
+        dish.serve = 1
         if Menu.objects.filter(restaurant_id = restaurant_id, dish_id = dish.id).exists():
             pass
         else:
             menu = create_menu(restaurant_id = restaurant_id, dish_id = dish.id, user_id = request.user.id)
     else:
+        dish.serve = 0
         menu = Menu.objects.filter(restaurant_id = restaurant_id, dish_id = dish.id)
         menu.delete()
-    data = {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url if (image) else 'none', "serve":dish.serve}
-    return HttpResponse(data)
+    dish.save()
+    data = {"id": dish_id, "serve": serve}
+    return JsonResponse(data)
 
 @require_http_methods(['GET'])
 def employee_delete(request):
