@@ -19,20 +19,16 @@ $(document).ready(function() {
             }
             let data = $('#manager-employee-info').serialize();
             let url = $('#manager-employee-info').attr("action");
-            //let form = $(this)
+
             $.post(url, data, (result) => {
                 loadData(result);
                 parent.getEmployees();
             },'json'
-            );
-            //on success: loadData()
-            //parent.loadData();
-            
+            );            
         }
     });
     
     $("#delete-btn").on("click", function(){
-        //todo: ajax to delete the employee
         $.get("employee_delete",{employeeID: employeeID}, (result) => {
             sessionStorage.removeItem("employeeID");
             employeeID = undefined;
@@ -83,15 +79,19 @@ function validateInfo(){
         alert("Please enter employee username!!");
         return false;
     }
-    
-    if($("input#password").val() == ""){
-        alert("Please enter employee password!!");
-        return false;
-    }
-    if($("input#password").val() != $("input#password-cfm").val()) {
-        alert("Passwords don't match!!");
-        return false;
+
+    if($("input#password").val().match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/)) {
+        if($("input#password").val() == ""){
+            alert("Please enter password!!");
+            return false;
+        }
+        if($("input#password").val() != $("input#password-cfm").val()) {
+            alert("Passwords don't match!!");
+            return false;
+        } else {
+            return true;
+        }
     } else {
-        return true;
+        alert("Please make sure password is between 6 to 20 characters and includes 1 numeric digit and a special character (!@#$%^&*)")
     }
 }
