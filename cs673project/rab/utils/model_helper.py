@@ -20,8 +20,8 @@ def create_restaurant():
     #create_menu(restaurant)
     return restaurant.id
 
-def create_dish(name, cook_time, fresh_time, image, res_id):#, serve):
-    dish = Dish(name = name, cook_time = cook_time, fresh_time = fresh_time, image = image, restaurant_id = res_id)#, serve = serve)
+def create_dish(name, cook_time, fresh_time, image, res_id):
+    dish = Dish(name = name, cook_time = cook_time, fresh_time = fresh_time, image = image, restaurant_id = res_id)
     dish.save()
     return dish
 

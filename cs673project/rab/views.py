@@ -189,10 +189,7 @@ def dishes(request):
     if(request.GET.get('dishID',None) is not None):
         dishes = Dish.objects.filter(restaurant_id=restaurant_id)
         dish = get_object_or_404(dishes, id=request.GET['dishID'])
-        if (dish.image): 
-            data =  {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url, "serve":dish.serve}
-        else:
-            data =  {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "serve":dish.serve}
+        data = {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url if dish.image else 'none', "serve":dish.serve}
     else:
         dishes = Dish.objects.filter(restaurant_id=restaurant_id)
         id = 0
@@ -274,7 +271,7 @@ def dish_update(request):
     #serve = request.POST['serve']
     dish = None
     if(dish_id is not None):
-        dishes = Dish.objects.filter(restaurant_id=restaurant) #restaurant_id?
+        dishes = Dish.objects.filter(restaurant_id=restaurant) 
         dish = get_object_or_404(dishes, id=dish_id)
         dish.name = name
         dish.cook_time = cook_time
@@ -284,12 +281,12 @@ def dish_update(request):
         dish.save()
     else: #brand new dish
         if validate_dish_input(name, cook_time, fresh_time):
-            dish = create_dish(name, cook_time, fresh_time, image, restaurant_id)#, serve)
+            dish = create_dish(name, cook_time, fresh_time, image, restaurant_id)
             dish.name = name
             dish.cook_time = cook_time
             dish.fresh_time = fresh_time
             dish.save()
-    data = {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url if (image) else 'none'}#, "serve":dish.serve}
+    data = {"id": dish.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url if (image) else 'none'}
     return JsonResponse(data)
 
 @require_http_methods(['POST'])
