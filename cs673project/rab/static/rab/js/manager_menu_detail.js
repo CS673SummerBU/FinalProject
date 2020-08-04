@@ -163,11 +163,22 @@ function validateDish(){
         alert("Please enter Cook Time!!")
         return false;
     }
+
     if($("input#fresh-time").val() == ""){
         alert("Please enter Fresh Time!!")
         return false;
     }
     
+    if($("input#cook-time").val() <= 0){
+        alert("Please enter Cook Time greater than 0!!")
+        return false;
+    }
+
+    if($("input#fresh-time").val() <= 0){
+        alert("Please enter Fresh Time greater than 0!!")
+        return false;
+    }
+
     return true;
 }
 
