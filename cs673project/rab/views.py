@@ -41,17 +41,27 @@ def sign_up(request):
 def login_user(request):
     username = request.POST['username']
     password = request.POST['pass']
+    data = {}
     user = authenticate(username = username, password = password)
     if (user is not None):
         login(request, user)
         return redirect_user(user.role.id)
     else:
-        return redirect('')     
+        data = {'username': username}
+        return JsonResponse(data, safe = False)     
 
 @require_http_methods(['GET'])
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/rab/')
+
+@require_http_methods(['GET'])
+def validate_username(request):
+    username = request.GET.get('username', None)
+    data = {
+        'is_taken': User.objects.filter(username = username).exists()
+    }
+    return JsonResponse(data)
 
 @login_required
 def manager(request):
