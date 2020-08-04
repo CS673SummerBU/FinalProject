@@ -17,11 +17,8 @@ $(document).ready(function() {
                 location.reload();
             },
         });
-        
-        //on success:
-        //sessionStorage.setItem("restaurantID", 1);
-        //sessionStorage.setItem("userID", 1);
-        //window.open("../html/manager.html");
+        sessionStorage.setItem("restaurantID", 1);
+        sessionStorage.setItem("userID", 1);
     });
     
 
@@ -32,7 +29,6 @@ $(document).ready(function() {
         console.log($("#reg-username").val());
 
         if(validatePassword()){
-            console.log('Password Validated!');
             $.ajax({
                 url: 'validate_username',
                 type: 'GET',
@@ -45,25 +41,21 @@ $(document).ready(function() {
                     if(data.is_taken) {
                         alert("A user with this username already exists!");
                         return;
-                    }
-                    console.log('Username Validated!');
-                    console.log($("#reg-username").val());
-                    let data_new = $('#reg-form').serialize();
-                    let url = $('#reg-form').attr("action");
-                    sessionStorage.setItem("restaurantID", 1);
-                    sessionStorage.setItem("userID", 1);
-                    finish = true;
-                    $.post(url, data_new, (result) => {
-                        console.log('Got into this post function');
-                        console.log($("#reg-username").val());
-                        $("#reg-username").val();
-                        $("#reg-pw").val();
-                        $("#reg-pw-cfm").val();
+                    } else {
+                        let data_new = $('#reg-form').serialize();
+                        let url = $('#reg-form').attr("action");
                         sessionStorage.setItem("restaurantID", 1);
                         sessionStorage.setItem("userID", 1);
-                        //window.location.href = '/manager/';
-                    },'json'
-                    );
+                        finish = true;
+                        $.post(url, data_new, (result) => {
+                            $("#reg-username").val();
+                            $("#reg-pw").val();
+                            $("#reg-pw-cfm").val();
+                            sessionStorage.setItem("restaurantID", 1);
+                            sessionStorage.setItem("userID", 1);
+                        },'json'
+                        );
+                    }
                 }
             });
             if (finish) {
@@ -71,7 +63,7 @@ $(document).ready(function() {
                 location.reload();
             } 
         }
-        $("#reg-username").val("");
+        $("#reg-username").val();
         $("#reg-pw").val("");
         $("#reg-pw-cfm").val("");
     });

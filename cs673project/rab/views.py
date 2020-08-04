@@ -58,9 +58,26 @@ def logout_user(request):
 @require_http_methods(['GET'])
 def validate_username(request):
     username = request.GET.get('username', None)
-    data = {
-        'is_taken': User.objects.filter(username = username).exists()
-    }
+    employeeID = request.GET.get('employeeID',None)
+    if (employeeID != None): #changing information of an existing employee
+        if (User.objects.filter(username = username, id = employeeID).exists()): #we can change user b/c username and employeeID match
+            data = {
+                'is_taken': False
+            }
+        else: 
+            if(User.objects.filter(username = username).exists()): #user was trying to change username to someone else's
+                data = {
+                    'is_taken': True
+                }
+            else: #user changing username that no one has already
+                data = {
+                    'is_taken': False
+                }
+    else: #new user entirely
+        data = {
+            'is_taken': User.objects.filter(username = username).exists()
+        }
+    print(data)
     return JsonResponse(data)
 
 @login_required

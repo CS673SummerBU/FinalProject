@@ -10,21 +10,68 @@ $(document).ready(function() {
     }
     
     $("#save-btn").on("click", function(e){
+        let url = $('#manager-employee-info').attr("action");
+
         if(validateInfo()){
             if(employeeID){
                 $("<input />").attr("type", "hidden")
                 .attr("name", "employeeID")
                 .attr("value", employeeID)
                 .appendTo("#manager-employee-info");
-            }
-            let data = $('#manager-employee-info').serialize();
-            let url = $('#manager-employee-info').attr("action");
+                console.log(employeeID);
 
-            $.post(url, data, (result) => {
-                loadData(result);
-                parent.getEmployees();
-            },'json'
-            );            
+                let data_new = $('#manager-employee-info').serialize();
+                $.ajax({
+                    url: 'validate_username',
+                    type: 'GET',
+                    data: {
+                        'username':  $("input#username").val(),
+                        'employeeID': employeeID,
+                    },
+                    dataType: 'json',
+                    async: false,
+                    success: function(data) {
+                        if(data.is_taken) {
+                            alert("A user with this username already exists!");
+                            return; 
+                        } else {
+                            $.post(url, data_new, (result) => {
+                                loadData(result);
+                                parent.getEmployees();
+                            },'json'
+                            );
+                            sessionStorage.setItem("userID", 1);
+                            sessionStorage.setItem("restaurantID", 1);
+                        }
+                    }
+                });
+            } else {
+                let data_new = $('#manager-employee-info').serialize();
+
+                $.ajax({
+                    url: 'validate_username',
+                    type: 'GET',
+                    data: {
+                        'username':  $("input#username").val(),
+                    },
+                    dataType: 'json',
+                    async: false,
+                    success: function(data) {
+                        if(data.is_taken) {
+                            alert("A user with this username already exists!");
+                            return; 
+                        } else {
+                            $.post(url, data_new, (result) => {
+                                loadData(result);
+                                parent.getEmployees();
+                            },'json'
+                            );
+                            sessionStorage.setItem("userID", 1);
+                            sessionStorage.setItem("restaurantID", 1); 
+                        }
+                    }
+                });
+            }
         }
     });
     
