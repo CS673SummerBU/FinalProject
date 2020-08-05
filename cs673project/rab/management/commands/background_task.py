@@ -19,15 +19,12 @@ class Command(BaseCommand):
         refresh = options['refresh']
         cook_task = options['runCookTask']
         
-        print(f'Timeout: {timeout}')
-        print(f'Refresh: {refresh}')
-        print(f'Cook Task: {cook_task}')
         time_end = time.time() + 60 * timeout 
 
         while time.time() <= time_end:
 
-            menu_items = Menu.objects.filter(restaurant__open_status = True).exclude(status_id = ((constants.STATUS_ORDER_PLACED, constants.STATUS_READY) if cook_task else  constants.STATUS_READY))
-            print(len(menu_items))
+            menu_items = Menu.objects.filter(restaurant__open_status = True).exclude(status_id = (constants.STATUS_READY if cook_task else  (constants.STATUS_ORDER_PLACED, constants.STATUS_READY)))
+
             if(len(menu_items) > 0):
                 for menu_item in menu_items:
                     if(menu_item.status.id == constants.STATUS_NO_ORDER_PLACED):
