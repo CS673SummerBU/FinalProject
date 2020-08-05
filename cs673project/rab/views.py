@@ -254,7 +254,8 @@ def orders(request):
     id = 0
     data = {}
     for order in orders:
-        due = order.last_updated + timedelta(minutes = order.dish.cook_time)
+        #due = order.last_updated + timedelta(minutes = order.dish.cook_time)
+        due = order.last_updated + timezone.timedelta(minutes = order.dish.cook_time)
         data[id] = {"id": order.id, "name":order.dish.name, "dueTime": int(due.timestamp()*1000), 'orderStatus': order.status.id}
         id+=1
     return JsonResponse(data)
