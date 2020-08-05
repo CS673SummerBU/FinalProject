@@ -1,11 +1,12 @@
 from ..models import User, Restaurant, Dish, Menu
 from django.db import transaction
 import traceback
+from ..utils import constants
 
 def create_user(username, password, role, res_id=None):
     try:
         with transaction.atomic():
-            if(role == 1 and res_id == None): #if another manager created. Stop from creating new restaurant
+            if(role == constants.ROLE_MANAGER and res_id == None): #if another manager created. Stop from creating new restaurant
                 res_id = create_restaurant() 
             user = User(username=username, is_superuser=False, is_active=True, is_staff=False, role_id=role, restaurant_id = res_id )
             user.set_password(password)
