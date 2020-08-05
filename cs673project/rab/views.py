@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .utils.validation import validate_registration, validate_dish_input
 from .utils.model_helper import create_user ,create_dish, create_menu
+from .utils import constants
 from .models import User, Restaurant, Role, Dish, Menu
 from datetime import datetime, timedelta
 import json
@@ -19,11 +20,11 @@ def index(request):
         return redirect_user(request.user.role.id)
 
 def redirect_user(role_id):
-    if (role_id == 1):
+    if (role_id == constants.ROLE_MANAGER):
         return redirect('manager')
-    elif (role_id == 2):
+    elif (role_id == constants.ROLE_WAITER):
         return redirect('waiter')
-    elif (role_id == 3):
+    elif (role_id == constants.ROLE_KITCHEN):
         return redirect('kitchen')
 
 @require_http_methods(['POST'])
@@ -31,7 +32,7 @@ def sign_up(request):
     username = request.POST['username']
     password = request.POST['pass']
     if validate_registration(username, password):
-        user = create_user(username,password,1)
+        user = create_user(username,password,manager.constants.ROLE_MANAGER)
         login(request, user)
         return redirect('manager')
     else:
@@ -55,35 +56,35 @@ def logout_user(request):
 
 @login_required
 def manager(request):
-    if(request.user.role.id == 1):
+    if(request.user.role.id == constants.ROLE_MANAGER):
         return render(request, 'manager.html')
     else:
         return redirect('')
 
 @login_required
 def waiter(request):
-    if(request.user.role.id == 2):
+    if(request.user.role.id == constants.ROLE_WAITER):
         return render(request, 'waiter.html')
     else:
         return redirect('')
 
 @login_required
 def kitchen(request):
-    if(request.user.role.id == 3):
+    if(request.user.role.id == constants.ROLE_KITCHEN):
         return render(request, 'kitchen.html')
     else:
         return redirect('')
 
 @login_required
 def manager_personal(request):
-    if(request.user.role.id == 1):
+    if(request.user.role.id == constants.ROLE_MANAGER):
         return render(request, 'manager_personal.html')
     else:
         return redirect('')
 
 @login_required
 def manager_restaurant(request):
-    if(request.user.role.id == 1):
+    if(request.user.role.id == constants.ROLE_MANAGER):
         restaurant = Restaurant.objects.get(pk=request.user.restaurant.id)
         return render(request, 'manager_restaurant.html', {"restaurant":restaurant})
     else:
@@ -91,42 +92,42 @@ def manager_restaurant(request):
 
 @login_required
 def manager_menu(request):
-    if(request.user.role.id == 1):
+    if(request.user.role.id == constants.ROLE_MANAGER):
         return render(request, 'manager_menu.html')
     else:
         return redirect('')
 
 @login_required
 def manager_menu_detail(request):
-    if(request.user.role.id == 1):
+    if(request.user.role.id == constants.ROLE_MANAGER):
         return render(request, 'manager_menu_detail.html')
     else:
         return redirect('')
 
 @login_required
 def manager_status(request):
-    if(request.user.role.id == 1):
+    if(request.user.role.id == constants.ROLE_MANAGER):
         return render(request, 'manager_status.html')
     else:
         return redirect('')
 
 @login_required
 def manager_status_detail(request):
-    if(request.user.role.id == 1):
+    if(request.user.role.id == constants.ROLE_MANAGER):
         return render(request, 'manager_status_detail.html')
     else:
         return redirect('')
 
 @login_required
 def manager_employee(request):
-    if(request.user.role.id == 1):
+    if(request.user.role.id == constants.ROLE_MANAGER):
         return render(request, 'manager_employee.html')
     else:
         return redirect('')
 
 @login_required
 def manager_employee_detail(request):
-    if(request.user.role.id == 1):
+    if(request.user.role.id == constants.ROLE_MANAGER):
         return render(request, 'manager_employee_detail.html')
     else:
         return redirect('')
@@ -333,7 +334,7 @@ def dish_delete(request):
 @login_required
 @require_http_methods(['GET'])
 def restaurant_status(request):
-    if(request.user.role.id == 1):
+    if(request.user.role.id == constants.ROLE_MANAGER):
         restaurant_id = request.user.restaurant.id
         status = request.GET.get('status',None)
         restaurant = Restaurant.objects.get(id=restaurant_id)
@@ -354,7 +355,7 @@ def restaurant_status(request):
 def menu_status(request):
     data = {}
     menu_items = Menu.objects.filter(restaurant_id = request.user.restaurant.id)
-    if(request.user.role.id == 2):
+    if(request.user.role.id == constants.ROLE_WAITER):
         for menu_item in menu_items:
             data[menu_item.id] = {"id": menu_item.id, "name": menu_item.dish.name, "cookTime": menu_item.dish.cook_time, "freshTime": menu_item.dish.fresh_time, 
             'orderStatus': menu_item.status.id, "lastServed": int((menu_item.last_served.timestamp() * 1000)) if menu_item.last_served else 'none',
@@ -367,13 +368,13 @@ def set_status(request):
     menus = Menu.objects.filter(restaurant_id = request.user.restaurant.id)
     menu_item = get_object_or_404(menus, id=request.GET.get('menuitem',None))
     status = int(request.GET['status'])
-    if(request.user.role.id == 2): #waiter
+    if(request.user.role.id == constants.ROLE_WAITER): #waiter
         if(menu_item.status.id == status and status == 3):
             menu_item.status_id = 4
             menu_item.last_served = timezone.now()
         elif(menu_item.status.id == status and (status == 1 or status == 4)):
             menu_item.status_id = 2
-    elif(request.user.role.id == 3): #kitchen
+    elif(request.user.role.id == constants.ROLE_KITCHEN): #kitchen
         if(status == 2):
             menu_item.status_id = 3
     menu_item.user_id = request.user.id
@@ -381,8 +382,8 @@ def set_status(request):
     return HttpResponse()
 
 def customer(request,restaurant_name):
-    name = restaurant_name.replace("_"," ") 
-    restaurant = get_object_or_404(Restaurant, name = name)
+    name = restaurant_name.replace("_"," ").lower() 
+    restaurant = get_object_or_404(Restaurant, name__iexact = name)
     return render(request, 'customer.html', {"restaurant" : restaurant })
 
 
