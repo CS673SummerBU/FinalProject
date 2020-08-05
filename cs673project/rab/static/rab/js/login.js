@@ -4,21 +4,24 @@ $(document).ready(function() {
         var tk = $(this).attr("data-token");
         let username = $("#login-username").val();
         let pw = $("#login-pw").val();
+        let data = $(this).serialize();
 
         $.ajax({
-            url: 'login_user',
-            type: 'POST',
+            url: $('#log-form').attr("action"),
+            type: "POST",
             dataType: 'json',
             data: {
                 'csrfmiddlewaretoken': tk, 'username': username, 'pass':pw
             },
-            success: function(data) {
-                alert('Username and password combination was incorrect!');
+            success: function(response) {
+                if (response.username == "") {
+                    $(".login-error-messages").text("Username and password combination was incorrect!").fadeIn().delay(10000).fadeOut();
+                } 
+            },
+            error: function(response) {
                 location.reload();
             },
         });
-        sessionStorage.setItem("restaurantID", 1);
-        sessionStorage.setItem("userID", 1);
     });
     
 
@@ -39,7 +42,8 @@ $(document).ready(function() {
                 async: false,
                 success: function(data) {
                     if(data.is_taken) {
-                        alert("A user with this username already exists!");
+                        $(".register-error-messages").text("A user with this username already exists!").fadeIn().delay(10000).fadeOut();
+                        //alert("A user with this username already exists!");
                         return;
                     } else {
                         let data_new = $('#reg-form').serialize();
@@ -59,7 +63,7 @@ $(document).ready(function() {
                 }
             });
             if (finish) {
-                alert('A user has been created!');
+                //alert('A user has been created!');
                 location.reload();
             } 
         }
@@ -72,17 +76,20 @@ $(document).ready(function() {
 function validatePassword(){
     if($("#reg-pw").val().match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/)) {
         if($("#reg-pw").val() == ""){
-            alert("Please enter password!!");
+            $(".register-error-messages").text("Please enter password!!").fadeIn().delay(10000).fadeOut();
+            //alert("Please enter password!!");
             return false;
         }
         if($("#reg-pw").val() != $("#reg-pw-cfm").val()) {
-            alert("Passwords don't match!!");
+            $(".register-error-messages").text("Passwords don't match!!").fadeIn().delay(10000).fadeOut();
+            //alert("Passwords don't match!!");
             return false;
         } else {
             return true;
         }
     } else {
-        alert("Please make sure password is between 6 to 20 characters and includes 1 numeric digit and a special character (!@#$%^&*)")
+        $(".register-error-messages").text("Please make sure password is between 6 to 20 characters and includes 1 numeric digit and a special character (!@#$%^&*)").fadeIn().delay(10000).fadeOut();
+        //alert("Please make sure password is between 6 to 20 characters and includes 1 numeric digit and a special character (!@#$%^&*)")
     }
 }
 

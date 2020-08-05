@@ -31,12 +31,13 @@
 						</div>
 						
 						<div class="container-form-btn">
-							<input type=Submit id="login-btn" class="form-btn" value="Login" data-token = "{{ csrf_token }}">
+							<input type="button" id="login-btn" class="form-btn" value="Login" data-token = "{{ csrf_token }}">
 							<!--<button id="login-btn" class="form-btn" type="button">
 								Sign in
 							</button>-->
 						</div>
 				</form>
+				<p><div class="login-error-messages" style="display:none;"></div></p>
 			</div>
 		</div>
 		
@@ -69,7 +70,9 @@
 							</button>-->
 						</div>
 				</form>
+				<p><div class="register-error-messages" style="display:none;"></div></p>
 			</div>
 		</div>
 	</div>
 </body>
+

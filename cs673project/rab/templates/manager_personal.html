@@ -19,27 +19,30 @@
 					    <p>Firstname*</p>
 						<input id = "firstname" class="input" type="text" name="firstname" placeholder="First Name" value="{{ user.first_name }}">
 					</div>
+					<p><div class="manager-personal-firstname-messages" style="display:none;"></div></p>
 
 					<div class="wrap-input">
 					    <p>Lastname*</p>
 						<input id = "lastname" class="input" type="text" name="lastname"  placeholder="Last Name" value="{{ user.last_name}}">
 					</div>
+					<p><div class="manager-personal-lastname-messages" style="display:none;"></div></p>
 					
 					<div class="wrap-input">
 					    <p>Email/Username*</p>
 						<input id = "username" class="input" type="email" name="username" value="{{ user.username }}">
 					</div>
+					<p><div class="manager-personal-username-messages" style="display:none;"></div></p>
 					
 					<div class="wrap-input">
 					    <p>Password*</p>
 						<input id = "password" class="input" type="password" name="pass" placeholder="Password">
 					</div>
+					<p><div class="manager-personal-password-messages" style="display:none;"></div></p>
 					
 					<div class="wrap-input">
 					    <p>Confirm Password*</p>
 						<input id = "password-cfm" class="input" type="password" name="pass" placeholder="Confirm Password">
 					</div>
-
 
 					<div class="container-form-btn">
 						<input type=Submit id="save-btn" class="save-btn" value="Save">

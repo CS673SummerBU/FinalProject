@@ -4,8 +4,9 @@ $(document).ready(function() {
     setStatus(undefined);
 
     $("#manager-restaurant-form").on("submit", function(e){
-        e.preventDefault()
+        e.preventDefault();
             //todo: ajax to update user info
+        if(validateInfo()) {
             let data = $(this).serialize();
             let url = $(this).attr("action");
             //let form = $(this)
@@ -13,6 +14,7 @@ $(document).ready(function() {
                 loadData(result);
             },'json'
             );
+        }
     }); 
 
 
@@ -45,4 +47,14 @@ function loadData(restaurant){
     $("input#open-time").val(restaurant.open_time);
     $("input#close-time").val(restaurant.close_time);
     
+}
+
+
+function validateInfo() {
+    if($("input#name").val() == "") {
+        $(".manager-restaurant-name-error-messages").text("Please enter name of restaurant!!").fadeIn().delay(10000).fadeOut();
+        return false;
+    } else {
+        return true;
+    }
 }

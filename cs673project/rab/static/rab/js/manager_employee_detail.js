@@ -113,32 +113,38 @@ function loadData(employee){
 
 function validateInfo(){
     if($("input#firstname").val() == ""){
-        alert("Please enter employee firstname!!");
+        $(".manager-employee-firstname-error-messages").text("Please enter employee firstname!!").fadeIn().delay(10000).fadeOut();
+        //alert("Please enter employee firstname!!");
         return false;
     }
     
     if($("input#lastname").val() == ""){
-        alert("Please enter employee lastname!!");
+        //alert("Please enter employee lastname!!");
+        $(".manager-employee-lastname-error-messages").text("Please enter employee lastname!!").fadeIn().delay(10000).fadeOut();
         return false;
     }
     
     if($("input#username").val() == ""){
-        alert("Please enter employee username!!");
+        $(".manager-employee-username-error-messages").text("Please enter employee username!!").fadeIn().delay(10000).fadeOut();
+        //alert("Please enter employee username!!");
         return false;
     }
 
     if($("input#password").val().match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/)) {
         if($("input#password").val() == ""){
-            alert("Please enter password!!");
+            $(".manager-employee-password-error-messages").text("Please enter password!!").fadeIn().delay(10000).fadeOut();
+            //alert("Please enter password!!");
             return false;
         }
         if($("input#password").val() != $("input#password-cfm").val()) {
-            alert("Passwords don't match!!");
+            $(".manager-employee-password-error-messages").text("Please enter password!!").fadeIn().delay(10000).fadeOut();
+            //alert("Passwords don't match!!");
             return false;
         } else {
             return true;
         }
     } else {
-        alert("Please make sure password is between 6 to 20 characters and includes 1 numeric digit and a special character (!@#$%^&*)")
+        $(".manager-employee-password-error-messages").text("Please make sure password is between 6 to 20 characters and includes 1 numeric digit and a special character (!@#$%^&*)").fadeIn().delay(10000).fadeOut();
+        //alert("Please make sure password is between 6 to 20 characters and includes 1 numeric digit and a special character (!@#$%^&*)")
     }
 }

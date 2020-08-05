@@ -19,16 +19,19 @@
                         <p>Display Name*</p>
                         <input id = "display-name" class="input" type="text" name="display-name" placeholder="Name" required="required">
                     </div>
+                    <p><div class="menu-detail-name-error-messages" style="display:none;"></div></p>
 
                     <div class="wrap-input">
                         <p>Cook Time (min)</p>
                         <input id = "cook-time" class="input" type="number" name="cook-time" placeholder="00" required="required">
                     </div>
+                    <p><div class="menu-detail-cook-time-error-messages" style="display:none;"></div></p>
 
                     <div class="wrap-input">
                         <p>Fresh Time (min)</p>
                         <input id = "fresh-time" class="input" type="number" name="fresh-time" placeholder="00" required="required">
                     </div>
+                    <p><div class="menu-detail-fresh-time-error-messages" style="display:none;"></div></p>
 
                     <div class="wrap-input">
                         <p>Food Image</p>
@@ -62,7 +65,9 @@
                             <input id = "serve-dish" type="checkbox" method = "POST" action="dish_serve" data-token = "{{ csrf_token }}">
                             <span class="slider round"></span>
                         </label>
-                    </div>   
+                    </div>
+                    <p><div class="menu-detail-serve-error-messages" style="display:none;"></div></p>
+
             </form>
     </div>
 </body>

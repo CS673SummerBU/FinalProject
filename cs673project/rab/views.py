@@ -41,14 +41,14 @@ def sign_up(request):
 def login_user(request):
     username = request.POST['username']
     password = request.POST['pass']
-    data = {}
     user = authenticate(username = username, password = password)
+    print(user)
     if (user is not None):
         login(request, user)
         return redirect_user(user.role.id)
     else:
-        data = {'username': username}
-        return JsonResponse(data, safe = False)     
+        data = {'username':"",'pass':""}
+        return JsonResponse(data)     
 
 @require_http_methods(['GET'])
 def logout_user(request):
