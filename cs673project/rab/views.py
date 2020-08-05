@@ -235,7 +235,9 @@ def menus(request):
         menu = get_object_or_404(menus, id=request.GET['menuID'])
         dishes = Dish.objects.filter(restaurant_id =restaurant_id)
         dish = get_object_or_404(dishes, id=menu.dish_id)
-        data =  {"id": menu.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url if dish.image else 'none', "orderStatus" : menu.status.name}
+        print(menu.last_served)
+        data =  {"id": menu.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url if dish.image else 'none', "orderStatus" : menu.status.name, 
+        "lastServedTime": int((menu.last_served.timestamp() * 1000)) if menu.last_served else 'none',}
     else:
         menus = Menu.objects.filter(restaurant_id=restaurant_id)
         id = 0
