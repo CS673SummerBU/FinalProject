@@ -32,7 +32,7 @@ def sign_up(request):
     username = request.POST['username']
     password = request.POST['pass']
     if validate_registration(username, password):
-        user = create_user(username,password,manager.constants.ROLE_MANAGER)
+        user = create_user(username,password, constants.ROLE_MANAGER)
         login(request, user)
         return redirect('manager')
     else:
