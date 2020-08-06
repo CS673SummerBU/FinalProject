@@ -47,12 +47,38 @@ def login_user(request):
         login(request, user)
         return redirect_user(user.role.id)
     else:
-        return redirect('')     
+        data = {'username':"",'pass':""}
+        return JsonResponse(data)     
 
 @require_http_methods(['GET'])
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/rab/')
+
+@require_http_methods(['GET'])
+def validate_username(request):
+    username = request.GET.get('username', None)
+    employeeID = request.GET.get('employeeID',None)
+    if (employeeID != None): #changing information of an existing employee
+        if (User.objects.filter(username = username, id = employeeID).exists()): #we can change user b/c username and employeeID match
+            data = {
+                'is_taken': False
+            }
+        else: 
+            if(User.objects.filter(username = username).exists()): #user was trying to change username to someone else's
+                data = {
+                    'is_taken': True
+                }
+            else: #user changing username that no one has already
+                data = {
+                    'is_taken': False
+                }
+    else: #new user entirely
+        data = {
+            'is_taken': User.objects.filter(username = username).exists()
+        }
+    print(data)
+    return JsonResponse(data)
 
 @login_required
 def manager(request):
@@ -209,7 +235,8 @@ def menus(request):
         menu = get_object_or_404(menus, id=request.GET['menuID'])
         dishes = Dish.objects.filter(restaurant_id =restaurant_id)
         dish = get_object_or_404(dishes, id=menu.dish_id)
-        data =  {"id": menu.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url if dish.image else 'none', "orderStatus" : menu.status.name}
+        due = menu.last_updated + timezone.timedelta(minutes = dish.cook_time)
+        data =  {"id": menu.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url if dish.image else 'none', "orderStatus" : menu.status.name, "lastServedTime": int((menu.last_served.timestamp() * 1000)) if menu.last_served else 'none',"dueTime": int(due.timestamp()*1000)}
     else:
         menus = Menu.objects.filter(restaurant_id=restaurant_id)
         id = 0
@@ -226,7 +253,7 @@ def orders(request):
     id = 0
     data = {}
     for order in orders:
-        due = order.last_updated + timedelta(minutes = order.dish.cook_time)
+        due = order.last_updated + timezone.timedelta(minutes = order.dish.cook_time)        
         data[id] = {"id": order.id, "name":order.dish.name, "dueTime": int(due.timestamp()*1000), 'orderStatus': order.status.id}
         id+=1
     return JsonResponse(data)

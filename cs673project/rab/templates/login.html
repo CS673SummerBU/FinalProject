@@ -16,60 +16,61 @@
 	<div class="limiter">
 		<div class="container-form">
 			<div class="wrap-form">
-				<form class="login" method="POST" action="{% url 'login_user' %}">
+				<form class="login" id = "log-form" method="POST" action="login_user">
 					{% csrf_token %}
-					<p class="form-title">
-						User login
-					</p>
+						<p class="form-title">
+							User login
+						</p>
 
-					<div class="wrap-input">
-						<input id = "login-username" class="input" type="email" name="username" placeholder="Username" required>
-					</div>
+						<div class="wrap-input">
+							<input id = "login-username" class="input" type="email" name="username" placeholder="Username (Email)" required>
+						</div>
 
-					<div class="wrap-input">
-						<input id = "login-pw" class="input" type="password" name="pass" placeholder="Password" required>
-					</div>
-					
-					<div class="container-form-btn">
-						<input type=Submit id="login" class="form-btn" value="Login">
-						<!--<button id="login-btn" class="form-btn" type="button">
-							Sign in
-						</button>-->
-					</div>
-
+						<div class="wrap-input">
+							<input id = "login-pw" class="input" type="password" name="pass" placeholder="Password" required>
+						</div>
+						
+						<div class="container-form-btn">
+							<input type="button" id="login-btn" class="form-btn" value="Login" data-token = "{{ csrf_token }}">
+							<!--<button id="login-btn" class="form-btn" type="button">
+								Sign in
+							</button>-->
+						</div>
 				</form>
+				<p><div class="login-error-messages" style="display:none;"></div></p>
 			</div>
 		</div>
 		
 		
 		<div class="container-form">
 			<div class="wrap-form">
-				<form class="register" method="POST" action="{% url 'sign_up' %}">
+				<form class="register" id = "reg-form" method="POST" action="sign_up">
 					{% csrf_token %}
-					<p class="form-title">
-						Start a Restaurant
-					</p>
+						<p class="form-title">
+							Start a Restaurant
+						</p>
 
-					<div class="wrap-input ">
-						<input id = "reg-username" class="input" type="email" name="username" placeholder="Username" required>
-					</div>
+						<div class="wrap-input ">
+							<input id = "reg-username" class="input" type="email" name="username" placeholder="Username (Email)" required>
+						</div>
 
-					<div class="wrap-input">
-						<input id = "reg-pw" class="input" type="password" name="pass" placeholder="Password" required>
-					</div>
-					
-					<div class="wrap-input">
-						<input id = "reg-pw-cfm" class="input" type="password" name="pass" placeholder="Confirm Password" required>
-					</div>
+						<div class="wrap-input">
+							<input id = "reg-pw" class="input" type="password" name="pass" placeholder="Password" required>
+						</div>
+						
+						<div class="wrap-input">
+							<input id = "reg-pw-cfm" class="input" type="password" name="pass" placeholder="Confirm Password" required>
+						</div>
 
-					<div class="container-form-btn">
-						<input type=Submit id="register-btn" class="form-btn" value="Submit">
-							
-					<!--	<button id="register-btn" class="form-btn" type="button">
-							Register
-						</button>-->
-					</div>
+						<div class="container-form-btn">
+							<input type=Submit id="register-btn" class="form-btn" value="Submit">
+								
+						<!--	<button id="register-btn" class="form-btn" type="button">
+								Register
+							</button>-->
+						</div>
 				</form>
+				<p><div class="register-error-messages" style="display:none;"></div></p>
 			</div>
 		</div>
 	</div>

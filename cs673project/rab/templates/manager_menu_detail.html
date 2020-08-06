@@ -1,34 +1,37 @@
 {% load static %}
 <!DOCTYPE HTML>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/main.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/manager.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'rab/css/menu.css' %}">
-	
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'rab/css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'rab/css/manager.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'rab/css/menu.css' %}">
+    
     <!--<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'rab/js/manager_menu_detail.js' %}"></script>
 </head>
 <body>
-	<div class="limiter">
+    <div class="limiter">
             <form id="manager-dish-info" class = "personal-info" method="POST" action="dish_update">
                 {% csrf_token %}
                     <div class="wrap-input">
                         <p>Display Name*</p>
                         <input id = "display-name" class="input" type="text" name="display-name" placeholder="Name" required="required">
                     </div>
+                    <p><div class="menu-detail-name-error-messages" style="display:none;"></div></p>
 
                     <div class="wrap-input">
                         <p>Cook Time (min)</p>
                         <input id = "cook-time" class="input" type="number" name="cook-time" placeholder="00" required="required">
                     </div>
+                    <p><div class="menu-detail-cook-time-error-messages" style="display:none;"></div></p>
 
                     <div class="wrap-input">
                         <p>Fresh Time (min)</p>
                         <input id = "fresh-time" class="input" type="number" name="fresh-time" placeholder="00" required="required">
                     </div>
+                    <p><div class="menu-detail-fresh-time-error-messages" style="display:none;"></div></p>
 
                     <div class="wrap-input">
                         <p>Food Image</p>
@@ -62,9 +65,9 @@
                             <input id = "serve-dish" type="checkbox" method = "POST" action="dish_serve" data-token = "{{ csrf_token }}">
                             <span class="slider round"></span>
                         </label>
-                    </div>   
+                    </div>
+                    <p><div class="menu-detail-serve-error-messages" style="display:none;"></div></p>
+
             </form>
     </div>
 </body>
-
-

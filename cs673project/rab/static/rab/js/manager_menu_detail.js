@@ -50,7 +50,7 @@ $(document).ready(function() {
             );
             */
         } else {
-            alert("Save the dish before serving!!");
+            $(".menu-detail-serve-error-messages").text("Save the dish before serving!!").fadeIn().delay(10000).fadeOut();
             $(this).prop("checked", false);
         }
     });
@@ -156,18 +156,34 @@ function loadData(dish){
 
 function validateDish(){
     if($("input#display-name").val() == ""){
-        alert("Please enter Dish name!!")
+        $(".menu-detail-name-error-messages").text("Please enter Dish name!!").fadeIn().delay(10000).fadeOut();
+        //alert("Please enter Dish name!!")
         return false;
     }
     if($("input#cook-time").val() == ""){
-        alert("Please enter Cook Time!!")
+        $(".menu-detail-cook-time-error-messages").text("Please enter Cook Time!!").fadeIn().delay(10000).fadeOut();
+        //alert("Please enter Cook Time!!")
         return false;
     }
+
     if($("input#fresh-time").val() == ""){
-        alert("Please enter Fresh Time!!")
+        $(".menu-detail-fresh-time-error-messages").text("Please enter Fresh Time!!").fadeIn().delay(10000).fadeOut();
+        //alert("Please enter Fresh Time!!")
         return false;
     }
     
+    if($("input#cook-time").val() <= 0){
+        $(".menu-detail-cook-time-error-messages").text("Please enter Cook Time greater than 0!!").fadeIn().delay(10000).fadeOut();
+        //alert("Please enter Cook Time greater than 0!!")
+        return false;
+    }
+
+    if($("input#fresh-time").val() <= 0){
+        $(".menu-detail-fresh-time-error-messages").text("Please enter Cook Time greater than 0!!").fadeIn().delay(10000).fadeOut();
+        //alert("Please enter Fresh Time greater than 0!!")
+        return false;
+    }
+
     return true;
 }
 

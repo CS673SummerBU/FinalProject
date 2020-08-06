@@ -31,21 +31,15 @@ function loadData(menu){
     $("p#cook-time-value").text(menu.cookTime);
     $("p#fresh-time-value").text(menu.freshTime);
     $("p#order-status-value").text(menu.orderStatus);
-
+    $("p#last-served-value").text(menu.lastServedTime);     
+    $("p#next-refill-value").text(menu.dueTime);
     updateCountDown(menu);
     window.setInterval(updateCountDown(menu), 1000);
 }
 
 function updateCountDown(menu){
-    let currentTimeMillis = new Date().getTime();
-    $("p#last-served-value").text(millisToTimeString(currentTimeMillis - menu.lastServedTime));
-    let nextRefill = menu.lastServedTime + menu.freshTime * 60000 - currentTimeMillis;
-    if(nextRefill < 0){
-        $("p#next-refill-value").text("-" + millisToTimeString(nextRefill));
-        $("p#next-refill-value").css("color", "red");
-    }else{
-        $("p#next-refill-value").css("color", "");
-        $("p#next-refill-value").text(millisToTimeString(nextRefill));
-    }
-    
+    //let currentTimeMillis = new Date().getTime();
+
+    $("p#last-served-value").text(new Date(menu.lastServedTime).customFormat("#hh#:#mm#"));
+    $("p#next-refill-value").text(new Date(menu.dueTime).customFormat("#hh#:#mm#"));
 }

@@ -16,8 +16,11 @@ function loadData(){
     orderRoot.empty();
     
     Object.keys(orders).forEach(key => {
-      orders[key].dueTimeLeft = orders[key].dueTime - new Date().getTime();
-      orderRoot.append('<div class="container-order"><div id = "order-' + orders[key].id + '" class="wrap-order"><span class="order-id" style="display: none">' + orders[key].id + '</span><p class="order-title">' + orders[key].name + '</p><p class="order-due">' + millisToTimeString(orders[key].dueTimeLeft) + '</p><button class="ready-button">READY</button></div></div>');
+      orders[key].dueTimeLeft = new Date(dishes[key].dueTime).customFormat("#hh#:#mm#");
+      orderRoot.append('<div class="container-order"><div id = "order-' + orders[key].id + '" class="wrap-order"><span class="order-id" style="display: none">' + orders[key].id + '</span><p class="order-title">' + orders[key].name + '</p><p class="order-due">' + orders[key].dueTimeLeft + '</p><button class="ready-button">READY</button></div></div>');
+
+      //orders[key].dueTimeLeft = orders[key].dueTime - new Date().getTime();
+      //orderRoot.append('<div class="container-order"><div id = "order-' + orders[key].id + '" class="wrap-order"><span class="order-id" style="display: none">' + orders[key].id + '</span><p class="order-title">' + orders[key].name + '</p><p class="order-due">' + millisToTimeString(orders[key].dueTimeLeft) + '</p><button class="ready-button">READY</button></div></div>');
 
       if(orders[key].dueTimeLeft < 0){
         $("#order-" + orders[key].id).addClass("past-due");
