@@ -50,22 +50,13 @@ $(document).ready(function() {
                         let url = $('#reg-form').attr("action");
                         sessionStorage.setItem("restaurantID", 1);
                         sessionStorage.setItem("userID", 1);
-                        finish = true;
                         $.post(url, data_new, (result) => {
-                            $("#reg-username").val();
-                            $("#reg-pw").val();
-                            $("#reg-pw-cfm").val();
-                            sessionStorage.setItem("restaurantID", 1);
-                            sessionStorage.setItem("userID", 1);
-                        },'json'
+                            location.reload();
+                        }
                         );
                     }
                 }
             });
-            if (finish) {
-                //alert('A user has been created!');
-                location.reload();
-            } 
         }
         $("#reg-username").val();
         $("#reg-pw").val("");

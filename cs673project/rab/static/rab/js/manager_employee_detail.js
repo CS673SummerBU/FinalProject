@@ -79,6 +79,7 @@ $(document).ready(function() {
         $.get("employee_delete",{employeeID: employeeID}, (result) => {
             sessionStorage.removeItem("employeeID");
             employeeID = undefined;
+            $('#manager-employee-info')[0].reset();
             location.reload();
             parent.getEmployees();
             console.log("delete employee");
