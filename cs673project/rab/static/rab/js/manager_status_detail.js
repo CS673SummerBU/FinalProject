@@ -33,13 +33,15 @@ function loadData(menu){
     $("p#order-status-value").text(menu.orderStatus);
     $("p#last-served-value").text(menu.lastServedTime);     
     $("p#next-refill-value").text(menu.dueTime);
+
     updateCountDown(menu);
     window.setInterval(updateCountDown(menu), 1000);
 }
 
 function updateCountDown(menu){
     //let currentTimeMillis = new Date().getTime();
-
-    $("p#last-served-value").text(new Date(menu.lastServedTime).customFormat("#hh#:#mm#"));
-    $("p#next-refill-value").text(new Date(menu.dueTime).customFormat("#hh#:#mm#"));
+    if (menu.lastServedTime != 'none' && menu.dueTime != 'none') {
+        $("p#last-served-value").text(new Date(menu.lastServedTime).customFormat("#hh#:#mm#"));
+        $("p#next-refill-value").text(new Date(menu.dueTime).customFormat("#hh#:#mm#"));
+    }
 }
