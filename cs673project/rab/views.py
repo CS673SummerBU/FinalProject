@@ -255,7 +255,7 @@ def menus(request):
         dishes = Dish.objects.filter(restaurant_id =restaurant_id)
         dish = get_object_or_404(dishes, id=menu.dish_id)
         due = menu.last_updated + timezone.timedelta(minutes = dish.cook_time)
-        data =  {"id": menu.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url if dish.image else 'none', "orderStatus" : menu.status.name, "lastServedTime": int((menu.last_served.timestamp() * 1000)) if menu.last_served else 'none',"dueTime": int(due.timestamp()*1000)}
+        data =  {"id": menu.id, "name": dish.name, "cookTime": dish.cook_time, "freshTime": dish.fresh_time, "foodImageUrl": dish.image.url if dish.image else 'none', "orderStatus" : menu.status.name, "lastServedTime": int((menu.last_served.timestamp() * 1000)) if menu.last_served else 'none',"dueTime": int(due.timestamp()*1000) if menu.last_served else 'none'}
     else:
         menus = Menu.objects.filter(restaurant_id=restaurant_id)
         id = 0
