@@ -33,8 +33,8 @@ $(document).ready(function() {
                 url: url,
                 data: {'dishID':dishID,'serve-dish':checked,'csrfmiddlewaretoken': tk},        
                 success: function (response){
-                    sessionStorage.setItem("restaurantID", 1);
-                    sessionStorage.setItem("userID", 1);
+                    //sessionStorage.setItem("restaurantID", 1);
+                    //sessionStorage.setItem("userID", 1);
                     $(this).prop("checked", response.serve);
                 },
             });

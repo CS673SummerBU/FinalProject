@@ -25,7 +25,8 @@ $(document).ready(function() {
                 async: false,
                 success: function(data) {
                     if(data.is_taken) {
-                        alert("A user with this username already exists!");
+                        $(".manager-personal-username-messages").text("A user with this username already exists!").fadeIn().delay(10000).fadeOut();
+                        //alert("A user with this username already exists!");
                         return; 
                     } else {
                         $.post(url, data_new, (result) => {

@@ -14,12 +14,22 @@ $(document).ready(function() {
                 'csrfmiddlewaretoken': tk, 'username': username, 'pass':pw
             },
             success: function(response) {
-                if (response.username == "") {
-                    $(".login-error-messages").text("Username and password combination was incorrect!").fadeIn().delay(10000).fadeOut();
-                } 
+                //if (response.username == "") {
+                //    $(".login-error-messages").text("Username and password combination was incorrect!").fadeIn().delay(10000).fadeOut();
+                //} 
+                sessionStorage.setItem("restaurantID", response.restaurant_id);
+                sessionStorage.setItem("userID", response.user_id);
+                restaurantID = sessionStorage.getItem("restaurantID");
+                console.log(restaurantID);
+                location.reload();
             },
             error: function(response) {
-                location.reload();
+                $(".login-error-messages").text("Username and password combination was incorrect!").fadeIn().delay(10000).fadeOut();
+                //sessionStorage.setItem("restaurantID", 1);
+                //sessionStorage.setItem("userID", 1);
+                //restaurantID = sessionStorage.getItem("restaurantID");
+                //console.log(restaurantID);
+                //location.reload();
             },
         });
     });
@@ -48,8 +58,8 @@ $(document).ready(function() {
                     } else {
                         let data_new = $('#reg-form').serialize();
                         let url = $('#reg-form').attr("action");
-                        sessionStorage.setItem("restaurantID", 1);
-                        sessionStorage.setItem("userID", 1);
+                        sessionStorage.setItem("restaurantID", data.restaurant_id);
+                        sessionStorage.setItem("userID", data.user_id);
                         $.post(url, data_new, (result) => {
                             location.reload();
                         }

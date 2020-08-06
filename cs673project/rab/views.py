@@ -45,20 +45,31 @@ def login_user(request):
     user = authenticate(username = username, password = password)
     if (user is not None):
         login(request, user)
-        return redirect_user(user.role.id)
+        users = User.objects.filter(username = username)
+        user = get_object_or_404(users, username = username)
+        print('login happening')
+        data = {
+            'restaurant_id': user.restaurant_id,
+            'user_id': user.id,
+        }
+        #return redirect_user(user.role.id)
+        return JsonResponse(data)
     else:
-        data = {'username':"",'pass':""}
-        return JsonResponse(data)     
-
+        #data = {'username':"",'pass':""}
+        #return JsonResponse(data)     
+        return 
 @require_http_methods(['GET'])
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/rab/')
 
+
 @require_http_methods(['GET'])
 def validate_username(request):
     username = request.GET.get('username', None)
     employeeID = request.GET.get('employeeID',None)
+    print(username)
+    print(employeeID)
     if (employeeID != None): #changing information of an existing employee
         if (User.objects.filter(username = username, id = employeeID).exists()): #we can change user b/c username and employeeID match
             data = {
@@ -74,10 +85,18 @@ def validate_username(request):
                     'is_taken': False
                 }
     else: #new user entirely
-        data = {
-            'is_taken': User.objects.filter(username = username).exists()
-        }
-    print(data)
+        if(User.objects.filter(username = username).exists()):
+            users = User.objects.filter(username = username)
+            user = get_object_or_404(users, username = username)
+            data = {
+                'is_taken': User.objects.filter(username = username).exists(),
+                'restaurant_id': user.restaurant_id,
+                'user_id': user.id,
+            }
+        else:
+            data = {
+                'is_taken': User.objects.filter(username = username).exists(),
+            }
     return JsonResponse(data)
 
 @login_required

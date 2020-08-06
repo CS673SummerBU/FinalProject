@@ -32,7 +32,8 @@ $(document).ready(function() {
                     async: false,
                     success: function(data) {
                         if(data.is_taken) {
-                            alert("A user with this username already exists!");
+                            $(".manager-employee-username-error-messages").text("A user with this username already exists!").fadeIn().delay(10000).fadeOut();
+                            //alert("A user with this username already exists!");
                             return; 
                         } else {
                             $.post(url, data_new, (result) => {
@@ -40,8 +41,6 @@ $(document).ready(function() {
                                 parent.getEmployees();
                             },'json'
                             );
-                            sessionStorage.setItem("userID", 1);
-                            sessionStorage.setItem("restaurantID", 1);
                         }
                     }
                 });
@@ -58,7 +57,8 @@ $(document).ready(function() {
                     async: false,
                     success: function(data) {
                         if(data.is_taken) {
-                            alert("A user with this username already exists!");
+                            $(".manager-employee-username-error-messages").text("A user with this username already exists!").fadeIn().delay(10000).fadeOut();
+                            //alert("A user with this username already exists!");
                             return; 
                         } else {
                             $.post(url, data_new, (result) => {
@@ -66,8 +66,8 @@ $(document).ready(function() {
                                 parent.getEmployees();
                             },'json'
                             );
-                            sessionStorage.setItem("userID", 1);
-                            sessionStorage.setItem("restaurantID", 1); 
+                            //sessionStorage.setItem("userID", );
+                            //sessionStorage.setItem("restaurantID", 1); 
                         }
                     }
                 });
