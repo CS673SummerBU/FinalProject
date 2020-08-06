@@ -103,6 +103,7 @@ $(document).ready(function() {
         $.get("dish_delete", {dishID: dishID}, (result) => {
             sessionStorage.removeItem("dishID");
             dishID = undefined;
+            $('#manager-dish-info')[0].reset();
             location.reload();
             parent.getDishes();
         });
